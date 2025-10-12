@@ -8,9 +8,7 @@ Store::Store(string name, string address, double capacity)
 	: name(name), address(address), capacity(capacity)
 {}
 
-Seller::Seller(string name, string login, string password)
-	: name(name)
+Seller::Seller(string login)
 {
 	
-
 }

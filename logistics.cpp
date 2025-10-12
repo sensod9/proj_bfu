@@ -5,18 +5,45 @@
 
 using namespace std;
 
-void loadStores(vector<Store> stores)
+void loadStores(vector<Store>& stores)
 {
-	ifstream in("storeId");
+	ifstream in("storeId.txt");
 
 	string line;
 	while (getline(in, line))
 	{
 		stringstream ss(line);
 		vector<string> params;
-		for (int i = 0; !ss.eof(); ++i)
-			getline(ss, params[i], '|');
+		string temp;
+		for (int i = 0; !ss.eof(); ++i) {
+			getline(ss, temp, '|');
+			params.push_back(temp);
+		}
+
 		stores.push_back(Store(params[1], params[2], stod(params[3])));
+	}
+	
+	in.close();
+}
+
+void loadSellers(vector<Seller>& sellers)
+{
+	ifstream in("storeId.txt");
+
+	string line;
+	while (getline(in, line))
+	{
+		/*
+		stringstream ss(line);
+		vector<string> params;
+		string temp;
+		for (int i = 0; !ss.eof(); ++i) {
+			getline(ss, temp, '|');
+			params.push_back(temp);
+		}
+
+		stores.push_back(Store(params[1], params[2], stod(params[3])));
+		*/
 	}
 	
 	in.close();
@@ -25,7 +52,7 @@ void loadStores(vector<Store> stores)
 void printMenu(size_t sellerId)
 {
 	std::cout << std::endl << "--- Menu ---" << std::endl;
-	std::cout << "1. View stores";
+	std::cout << "1. View stores" << endl;
 	if (!sellerId) {
 		std::cout << "2. Login as seller";
 	}
@@ -38,15 +65,8 @@ int main()
 {
 	vector<Store> stores;
 	loadStores(stores);
-	for (auto& e : stores)
-	{
-		cout << e.name << endl;
-	}
 
 	size_t sellerId = 0;
-	for (;;)
-	{
-		printMenu(sellerId);
-	}
+	printMenu(sellerId);
 	return 0;
 }

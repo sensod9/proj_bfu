@@ -1,3 +1,4 @@
+#include <unordered_map>
 #include <vector>
 #include <string>
 
@@ -28,9 +29,10 @@ private:
 class Seller
 {
 public:
-	Seller(string name, string login, string password);
+	Seller(string login);
 	string name;
-	vector<Product*> products;
+	unordered_map<Product*, pair<int, int>> products; // <цена, кол-во>
+	size_t getId();
 private:
 	size_t id;
 	string login;
