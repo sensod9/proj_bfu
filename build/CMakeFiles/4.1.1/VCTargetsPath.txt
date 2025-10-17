@@ -1,1 +1,0 @@
-L:/Program Files/VisualStudio2022/MSBuild/Microsoft/VC/v170
