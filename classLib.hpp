@@ -7,33 +7,43 @@ using namespace std;
 class Product
 {
 public:
-	Product(string name, double size, vector<string> consist);
+	Product(uint32_t id, string name, double size, vector<string> consist, uint32_t price);
 	string name;
 	double size;
 	vector<string> consist;
-private:
-	size_t id;
+	uint32_t price;
+	uint32_t id;
+};
+
+struct Address {
+	uint32_t index;
+	string city;
+	string street;
+	uint32_t house_number;
+};
+
+struct Items {
+	uint32_t id;
+	uint32_t quantity;
 };
 
 class Store
 {
 public:
-	Store(string name, string address, double capacity);
+	Store(uint32_t id, string name, Address address, double capacity);
 	string name;
-	string address;
+	Address address;
 	double capacity;
-private:
-	size_t id;
+	unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
+	uint32_t id;
 };
 
 class Seller
 {
 public:
-	Seller(string login);
+	Seller(uint32_t id, string name, vector<Items>* items, string login);
 	string name;
-	unordered_map<Product*, pair<int, int>> products; // <цена, кол-во>
-	size_t getId();
-private:
-	size_t id;
+	vector<Items>* items;
+	uint32_t id;
 	string login;
 };

@@ -1,0 +1,34 @@
+# CMake generation dependency list for this directory.
+L:/Program Files/share/cmake-4.1/Modules/CMakeCInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeCXXInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeCommonLanguageInclude.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeGenericSystem.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeInitializeConfigs.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeLanguageInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeRCInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeSystemSpecificInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/CMakeSystemSpecificInitialize.cmake
+L:/Program Files/share/cmake-4.1/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+L:/Program Files/share/cmake-4.1/Modules/Compiler/MSVC-C.cmake
+L:/Program Files/share/cmake-4.1/Modules/Compiler/MSVC-CXX.cmake
+L:/Program Files/share/cmake-4.1/Modules/Compiler/MSVC.cmake
+L:/Program Files/share/cmake-4.1/Modules/Internal/CMakeCLinkerInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/Internal/CMakeCXXLinkerInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/Internal/CMakeCommonLinkerInformation.cmake
+L:/Program Files/share/cmake-4.1/Modules/Linker/MSVC-C.cmake
+L:/Program Files/share/cmake-4.1/Modules/Linker/MSVC-CXX.cmake
+L:/Program Files/share/cmake-4.1/Modules/Linker/MSVC.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC-C.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC-CXX.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Windows-Initialize.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Windows-MSVC-C.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Windows-MSVC-CXX.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/Windows.cmake
+L:/Program Files/share/cmake-4.1/Modules/Platform/WindowsPaths.cmake
+L:/SCR/_BFU/proj_bfu/CMakeLists.txt
+L:/SCR/_BFU/proj_bfu/build/CMakeFiles/4.1.1/CMakeCCompiler.cmake
+L:/SCR/_BFU/proj_bfu/build/CMakeFiles/4.1.1/CMakeCXXCompiler.cmake
+L:/SCR/_BFU/proj_bfu/build/CMakeFiles/4.1.1/CMakeRCCompiler.cmake
+L:/SCR/_BFU/proj_bfu/build/CMakeFiles/4.1.1/CMakeSystem.cmake

@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"L:/SCR/_BFU/proj_bfu/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

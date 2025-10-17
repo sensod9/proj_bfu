@@ -1,2 +1,2 @@
-1|seller1|store1,store2
-2|seller2|store1,store2
+1|seller1|1,2
+2|seller2|1,2

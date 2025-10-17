@@ -1,0 +1,10 @@
+^L:\SCR\_BFU\PROJ_BFU\CMAKELISTS.TXT
+setlocal
+"L:\Program Files\bin\cmake.exe" -SL:/SCR/_BFU/proj_bfu -BL:/SCR/_BFU/proj_bfu/build --check-stamp-file L:/SCR/_BFU/proj_bfu/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
