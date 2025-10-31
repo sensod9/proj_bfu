@@ -1,6 +1,6 @@
 #include "classLib.hpp"
 
-Product::Product(uint32_t id, string name, double size, vector<string> consist, uint32_t price)
+Product::Product(string name, double size, vector<string> consist, uint32_t price)
 	: name(name), size(size), consist(consist), price(price)
 {}
 

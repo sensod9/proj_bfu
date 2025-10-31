@@ -7,7 +7,7 @@ using namespace std;
 class Product
 {
 public:
-	Product(uint32_t id, string name, double size, vector<string> consist, uint32_t price);
+	Product(string name, double size, vector<string> consist, uint32_t price);
 	string name;
 	double size;
 	vector<string> consist;
