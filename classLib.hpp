@@ -12,7 +12,6 @@ public:
 	double size;
 	vector<string> consist;
 	uint32_t price;
-	uint32_t id;
 };
 
 struct Address {
@@ -23,14 +22,15 @@ struct Address {
 };
 
 struct Items {
-	uint32_t id;
+	Items(Product* product, uint32_t quantity);
+	Product* product;
 	uint32_t quantity;
 };
 
 class Store
 {
 public:
-	Store(uint32_t id, string name, Address address, double capacity);
+	Store(uint32_t id, string name, Address address, double capacity, unordered_map<uint32_t, vector<Items>> sellers_items);
 	string name;
 	Address address;
 	double capacity;

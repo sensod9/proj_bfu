@@ -25,13 +25,7 @@ void loadProducts(vector<Product>& products)
 	string line;
 	while (getline(in, line))
 	{
-		stringstream ss(line);
-		vector<string> params;
-		string temp;
-		for (int i = 0; !ss.eof(); ++i) {
-			getline(ss, temp, ';');
-			params.push_back(temp);
-		}
+		vector<string> params = splitToVector(line, ';');
 
 		products.push_back(Product(stol(params[0]), params[1], stod(params[2]), splitToVector(params[3], ','), stol(params[4])));
 	}
@@ -46,16 +40,25 @@ void loadStores(vector<Store>& stores)
 	string line;
 	while (getline(in, line))
 	{
-		stringstream ss(line);
-		vector<string> params;
-		string temp;
-		for (int i = 0; !ss.eof(); ++i) {
-			getline(ss, temp, '|');
-			params.push_back(temp);
-		}
-
+		vector<string> params = splitToVector(line, '|');
 		vector<string> address = splitToVector(params[2]);
+		unordered_map<uint32_t, vector<Items>> sellers_items;
+
+		vector<string> str_sellers = splitToVector(params[4], ';');
+		for (auto& e : str_sellers) {
+			vector<string> temp = splitToVector(e, ':');
+			vector<Items> items;
+
+			vector<string> str_items = splitToVector(temp[1], '&');
+			for (auto& k : str_items) {
+				items.push_back(Items())
+			}
+			sellers_items.insert(stol(temp[0]), )			
+		}
+		
+		
 		stores.push_back(Store(stol(params[0]), params[1], Address{static_cast<uint32_t>(stol(address[0])), address[1], address[2], static_cast<uint32_t>(stol(address[3]))}, stod(params[3])));
+			// unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
 	}
 	
 	in.close();
