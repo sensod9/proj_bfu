@@ -1,11 +1,12 @@
 #include <iostream>
+			
 #include <fstream>
 #include <sstream>
 #include "classLib.hpp"
 
 using namespace std;
 
-vector<string>& splitToVector(string s, char delim = ',')
+vector<string> splitToVector(string s, char delim = ',')
 {
 	string temp;
 	vector<string> v;
@@ -17,7 +18,7 @@ vector<string>& splitToVector(string s, char delim = ',')
 	return v;
 }
 
-void loadProducts(unordered_map<uint32_t, Product> products)
+void loadProducts(unordered_map<uint32_t, Product>& products)
 {
 	ifstream in("products.csv");
 	in.ignore(1024, '\n'); // Id;Name;Size;Consist
@@ -27,13 +28,13 @@ void loadProducts(unordered_map<uint32_t, Product> products)
 	{
 		vector<string> params = splitToVector(line, ';');
 
-		products.insert({stol(params[0]), Product(params[1], stod(params[2]), splitToVector(params[3], ','), stol(params[4]))});
+		products.insert({stoul(params[0]), Product(params[1], stod(params[2]), splitToVector(params[3], ','), stoul(params[4]))});
 	}
 	
 	in.close();
 }
 
-void loadStores(vector<Store>& stores, unordered_map<uint32_t, Product>& products)
+void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, Product>& products)
 {
 	ifstream in("storeId.txt");
 
@@ -41,7 +42,7 @@ void loadStores(vector<Store>& stores, unordered_map<uint32_t, Product>& product
 	while (getline(in, line))
 	{
 		vector<string> params = splitToVector(line, '|');
-		vector<string> address = splitToVector(params[2]);
+		vector<string> address = splitToVector(params[2], ',');
 		unordered_map<uint32_t, vector<Items>> sellers_items;
 
 		vector<Items> items;
@@ -52,13 +53,19 @@ void loadStores(vector<Store>& stores, unordered_map<uint32_t, Product>& product
 			vector<string> str_items = splitToVector(temp[1], '&');
 			for (auto& str_item : str_items) {
 				vector<string> temp2 = splitToVector(str_item, ',');
-				items.push_back(Items(&products[stol(temp2[0])], stol(temp2[1])));
+				auto product_it = products.find(stoul(temp2[0]));
+				if (product_it != products.end()) {
+					items.push_back(Items(&(product_it->second), stoul(temp2[1])));
+				}
+				else {
+					cerr << "loadStores, product_it == product.end()" << endl;
+				}
 			}
-			sellers_items.insert({stol(temp[0]), items});
+			sellers_items.insert({stoul(temp[0]), items});
 		}
 		
 		
-		stores.push_back(Store(stol(params[0]), params[1], Address{static_cast<uint32_t>(stol(address[0])), address[1], address[2], static_cast<uint32_t>(stol(address[3]))}, stod(params[3]), sellers_items));
+		stores.insert({stoul(params[0]), Store(params[1], Address{static_cast<uint32_t>(stoul(address[0])), address[1], address[2], static_cast<uint32_t>(stoul(address[3]))}, stod(params[3]), sellers_items)});
 			// unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
 	}
 	
@@ -70,24 +77,35 @@ void loadStores(vector<Store>& stores, unordered_map<uint32_t, Product>& product
 // либо массив указателей на sellers_items (сверху коммент). определённо через парам с номерами складов
 // будем итерировать по складам (поэтому и передаю stores), но в самом классе такое не нужно, тк список предметов будет хз
 // (тогда действительно лучше массив указателей на sellers items) бб
-void loadSellers(vector<Seller>& sellers, vector<Store>& stores)
+void loadSellers(vector<Seller>& sellers, unordered_map<uint32_t, Store>& stores)
 {
 	ifstream in("sellerId.txt");
 
 	string line;
 	while (getline(in, line))
 	{
-		/*
-		stringstream ss(line);
-		vector<string> params;
-		string temp;
-		for (int i = 0; !ss.eof(); ++i) {
-			getline(ss, temp, '|');
-			params.push_back(temp);
-		}
+		vector<string> params = splitToVector(line, '|');
+		uint32_t seller_id = stoul(params[0]);
 
-		stores.push_back(Store(params[1], params[2], stod(params[3])));
-		*/
+		unordered_map<uint32_t, vector<Items>*> items;
+		for (auto& store_id : splitToVector(params[2], ','))
+		{
+			auto store_it = stores.find(stoul(store_id));	
+			if (store_it != stores.end()) {
+				auto seller_items_it = (store_it->second).sellers_items.find(seller_id);	
+				if (seller_items_it != (store_it->second).sellers_items.end()) {
+					items.insert({stoul(store_id), &(seller_items_it->second)});
+				}
+				else {
+					cerr << "loadSellers, 2it == .end()" << endl;
+				}
+			}
+			else {
+				cerr << "loadSellers, it == .end()" << endl;
+			}
+		}
+		
+		sellers.push_back(Seller(seller_id, params[1], items));
 	}
 	
 	in.close();
@@ -108,7 +126,7 @@ void printMenu(size_t sellerId)
 int main()
 {
 	unordered_map<uint32_t, Product> products;
-	vector<Store> stores;
+	unordered_map<uint32_t, Store> stores;
 	vector<Seller> sellers;
 	loadProducts(products);
 	loadStores(stores, products);

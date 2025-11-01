@@ -30,20 +30,19 @@ struct Items {
 class Store
 {
 public:
-	Store(uint32_t id, string name, Address address, double capacity, unordered_map<uint32_t, vector<Items>> sellers_items);
+	Store(string name, Address address, double capacity, unordered_map<uint32_t, vector<Items>> sellers_items);
 	string name;
 	Address address;
 	double capacity;
 	unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
-	uint32_t id;
 };
 
 class Seller
 {
 public:
-	Seller(uint32_t id, string name, vector<Items>* items, string login);
+	Seller(uint32_t id, string name, unordered_map<uint32_t, vector<Items>*> items);
 	string name;
-	vector<Items>* items;
+	unordered_map<uint32_t, vector<Items>*> items; // store id, Items
 	uint32_t id;
 	string login;
 };
