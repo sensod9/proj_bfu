@@ -48,6 +48,7 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 		vector<Items> items;
 		vector<string> str_sellers = splitToVector(params[4], '&');
 		for (auto& e : str_sellers) {
+			items.clear();
 			vector<string> temp = splitToVector(e, ':');
 
 			vector<string> str_items = splitToVector(temp[1], ';');
@@ -71,12 +72,7 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 	in.close();
 }
 
-// САММАРИ 1 НОВ - мапа сверху селлер айтемы. в принципе все айдишки можно так и сделать, при лоде селлеров короче
-// намутить либо общий список айтемов (vector<Items> там и так указатели), 
-// либо массив указателей на sellers_items (сверху коммент). определённо через парам с номерами складов
-// будем итерировать по складам (поэтому и передаю stores), но в самом классе такое не нужно, тк список предметов будет хз
-// (тогда действительно лучше массив указателей на sellers items) бб
-void loadSellers(vector<Seller>& sellers, unordered_map<uint32_t, Store>& stores)
+void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_t, Store>& stores)
 {
 	ifstream in("sellerId.txt");
 
@@ -104,34 +100,69 @@ void loadSellers(vector<Seller>& sellers, unordered_map<uint32_t, Store>& stores
 			}
 		}
 		
-		sellers.push_back(Seller(seller_id, params[1], items));
+		sellers.insert({seller_id, Seller(params[1], items)});
 	}
 	
 	in.close();
 }
 
+void printStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, Seller> sellers)
+{
+	for (auto& [id, store] : stores) {
+		cout << " ------------- " << endl;
+		cout << "Name: " << store.name << endl;
+		cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
+		cout << "Capacity: " << store.capacity << endl;
+		
+		cout << endl << "- Sellers + items -";
+		for (auto& [seller_id, items] : store.sellers_items) {
+			auto seller_it = sellers.find(seller_id);
+			if (seller_it != sellers.end()) {
+				cout << endl << "Seller name: " << seller_it->second.name << endl;
+				for (auto& item : items) {
+					cout << "Item name: "<< item.product->name << ", size: " << item.product->size << ", quantity: " << item.quantity << ", consists of: ";
+					for (uint32_t i = 0; i < item.product->consist.size() - 1; ++i) {
+						cout << item.product->consist[i] << " | ";
+					}
+					cout << item.product->consist[item.product->consist.size() - 1] << endl;
+				}
+			}
+		}
+	}
+}
+
 void printMenu(size_t sellerId)
 {
-	std::cout << std::endl << "--- Menu ---" << std::endl;
-	std::cout << "1. View stores" << endl;
+	cout << endl << "--- Menu ---" << endl;
+	cout << "1. View stores" << endl;
 	if (!sellerId) {
-		std::cout << "2. Login as seller";
+		cout << "2. Login as seller";
 	}
 	else {
-		std::cout << "Logged as " << sellerId;
+		cout << "Logged as " << sellerId;
 	}
+	cout << endl;
 }
 
 int main()
 {
 	unordered_map<uint32_t, Product> products;
 	unordered_map<uint32_t, Store> stores;
-	vector<Seller> sellers;
+	unordered_map<uint32_t, Seller> sellers;
 	loadProducts(products);
 	loadStores(stores, products);
 	loadSellers(sellers, stores);
 
 	size_t sellerId = 0;
 	printMenu(sellerId);
+
+	uint32_t flag;	
+	cin >> flag;
+	
+	switch (flag) {
+		case 1:
+			printStores(stores, sellers);
+			break;
+	}
 	return 0;
 }

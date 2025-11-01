@@ -40,9 +40,8 @@ public:
 class Seller
 {
 public:
-	Seller(uint32_t id, string name, unordered_map<uint32_t, vector<Items>*> items);
+	Seller(string name, unordered_map<uint32_t, vector<Items>*> items);
 	string name;
 	unordered_map<uint32_t, vector<Items>*> items; // store id, Items
-	uint32_t id;
 	string login;
 };

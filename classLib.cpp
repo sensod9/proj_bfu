@@ -8,8 +8,8 @@ Store::Store(string name, Address address, double capacity, unordered_map<uint32
 	: name(name), address(address), capacity(capacity), sellers_items(sellers_items)
 {}
 // TODO ADDRESS
-Seller::Seller(uint32_t id, string name, unordered_map<uint32_t, vector<Items>*> items)
-	: id(id), name(name), items(items) 
+Seller::Seller(string name, unordered_map<uint32_t, vector<Items>*> items)
+	: name(name), items(items) 
 {}
 
 Items::Items(Product* product, uint32_t quantity)
