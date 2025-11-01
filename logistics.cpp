@@ -8,8 +8,8 @@ using namespace std;
 
 vector<string> splitToVector(string s, char delim = ',')
 {
-	string temp;
 	vector<string> v;
+	string temp;
 	stringstream ss(s);
 	for (int i = 0; !ss.eof(); ++i) {
 		getline(ss, temp, delim);
@@ -46,11 +46,11 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 		unordered_map<uint32_t, vector<Items>> sellers_items;
 
 		vector<Items> items;
-		vector<string> str_sellers = splitToVector(params[4], ';');
+		vector<string> str_sellers = splitToVector(params[4], '&');
 		for (auto& e : str_sellers) {
 			vector<string> temp = splitToVector(e, ':');
 
-			vector<string> str_items = splitToVector(temp[1], '&');
+			vector<string> str_items = splitToVector(temp[1], ';');
 			for (auto& str_item : str_items) {
 				vector<string> temp2 = splitToVector(str_item, ',');
 				auto product_it = products.find(stoul(temp2[0]));
@@ -63,7 +63,6 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 			}
 			sellers_items.insert({stoul(temp[0]), items});
 		}
-		
 		
 		stores.insert({stoul(params[0]), Store(params[1], Address{static_cast<uint32_t>(stoul(address[0])), address[1], address[2], static_cast<uint32_t>(stoul(address[3]))}, stod(params[3]), sellers_items)});
 			// unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
