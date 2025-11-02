@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 			
 #include <fstream>
 #include <sstream>
@@ -106,10 +107,19 @@ void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_
 	in.close();
 }
 
+void saveProducts(unordered_map<uint32_t, Product> products)
+{
+	// перезаписываем txt. такое же с storesId и sellersId. 
+	// после пополнения/вывоза вызывать чето такое ВСЕГДА СРАЗУ
+	// (только проверять capacity перед этим)
+	// возможно не только продакты принимать, тк разрозненно всё как-то
+	// понятно, что uint32_t - id, те итерируем по auto& [id, product]
+}
+
 void printStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, Seller> sellers)
 {
 	for (auto& [id, store] : stores) {
-		cout << " ------------- " << endl;
+		cout << endl << " ------------- " << endl;
 		cout << "Name: " << store.name << endl;
 		cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
 		cout << "Capacity: " << store.capacity << endl;
@@ -120,28 +130,91 @@ void printStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t,
 			if (seller_it != sellers.end()) {
 				cout << endl << "Seller name: " << seller_it->second.name << endl;
 				for (auto& item : items) {
-					cout << "Item name: "<< item.product->name << ", size: " << item.product->size << ", quantity: " << item.quantity << ", consists of: ";
-					for (uint32_t i = 0; i < item.product->consist.size() - 1; ++i) {
-						cout << item.product->consist[i] << " | ";
-					}
-					cout << item.product->consist[item.product->consist.size() - 1] << endl;
+					cout << "Item name: "<< item.product->name << ", size: " << item.product->size << ", quantity: " << item.quantity << endl;
 				}
 			}
 		}
 	}
 }
 
-void printMenu(size_t sellerId)
+uint32_t loginProc() {
+	ifstream in("db.txt");
+	vector<vector<string>> sellers; 
+	string line;
+	while (getline(in, line))
+	{
+		sellers.push_back(splitToVector(line, '|'));
+	}
+	in.close();
+
+	hash<string> hasher;
+	for (;;) {
+		string login, password;
+
+		cout << endl << "Login: "; 
+		cin >> login;
+		if (login == "0") return 0;
+		cout << "Password: "; 
+		cin >> password;
+		uint64_t h_login = hasher(login);
+		uint64_t h_password = hasher(password);
+		for (auto& seller : sellers) {
+			if (h_login == stoull(seller[0]) && h_password == stoull(seller[1])) {
+				return stoull(seller[2]);				
+			}
+		}
+		cout << "Incorrect. Try Again" << endl;
+	}
+}
+
+uint32_t enterMenu(uint32_t& seller_id,
+	unordered_map<uint32_t, Product>& products,
+	unordered_map<uint32_t, Store>& stores,
+	unordered_map<uint32_t, Seller>& sellers)
 {
+	uint32_t flag;
 	cout << endl << "--- Menu ---" << endl;
-	cout << "1. View stores" << endl;
-	if (!sellerId) {
-		cout << "2. Login as seller";
+	if (!seller_id) {
+		cout << "1. View stores" << endl;
+		cout << "2. Login as seller" << endl;
+		cout << "3. Exit app" << endl << " : ";
+
+		cin >> flag;
+		switch (flag) {
+			case 1:
+				printStores(stores, sellers);
+				break;
+			case 2:
+				seller_id = loginProc();
+				break;
+			case 3:
+				return 1;
+		}
 	}
 	else {
-		cout << "Logged as " << sellerId;
+		auto seller_it = sellers.find(seller_id);
+		if (seller_it == sellers.end()) return 1;
+
+		cout << "Logged as " << seller_it->second.name << endl;
+		cout << "1. View stores" << endl;
+		cout << "2. Log out" << endl;
+		cout << "3. Move items" << endl;
+		cout << "3. Deposit items" << endl;
+		cout << "5. Take out items" << endl;
+		cout << "6. Exit app" << endl << " : ";
+		cin >> flag;
+		switch (flag) {
+			case 1:
+				printStores(stores, sellers);
+				break;
+			case 2:
+				seller_id = loginProc();
+				break;
+			case 3:
+				return true;
+		}
 	}
-	cout << endl;
+	return 0;
 }
 
 int main()
@@ -153,16 +226,8 @@ int main()
 	loadStores(stores, products);
 	loadSellers(sellers, stores);
 
-	size_t sellerId = 0;
-	printMenu(sellerId);
+	uint32_t seller_id = 0;
 
-	uint32_t flag;	
-	cin >> flag;
-	
-	switch (flag) {
-		case 1:
-			printStores(stores, sellers);
-			break;
-	}
-	return 0;
+	for (;;)
+		if (enterMenu(seller_id, products, stores, sellers)) return 0;
 }
