@@ -27,9 +27,10 @@ void loadProducts(unordered_map<uint32_t, Product>& products)
 	string line;
 	while (getline(in, line))
 	{
+		if (line.empty()) continue;
 		vector<string> params = splitToVector(line, ';');
 
-		products.insert({stoul(params[0]), Product(params[1], stod(params[2]), splitToVector(params[3], ','), stoul(params[4]))});
+		products.insert({stoul(params[0]), Product(stoul(params[0]), params[1], stod(params[2]), splitToVector(params[3], ','), stoul(params[4]))});
 	}
 	
 	in.close();
@@ -42,6 +43,7 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 	string line;
 	while (getline(in, line))
 	{
+		if (line.empty()) continue;
 		vector<string> params = splitToVector(line, '|');
 		vector<string> address = splitToVector(params[2], ',');
 		unordered_map<uint32_t, vector<Items>> sellers_items;
@@ -80,6 +82,7 @@ void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_
 	string line;
 	while (getline(in, line))
 	{
+		if (line.empty()) continue;
 		vector<string> params = splitToVector(line, '|');
 		uint32_t seller_id = stoul(params[0]);
 
@@ -109,11 +112,51 @@ void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_
 
 void saveProducts(unordered_map<uint32_t, Product> products)
 {
-	// перезаписываем txt. такое же с storesId и sellersId. 
-	// после пополнения/вывоза вызывать чето такое ВСЕГДА СРАЗУ
-	// (только проверять capacity перед этим)
-	// возможно не только продакты принимать, тк разрозненно всё как-то
-	// понятно, что uint32_t - id, те итерируем по auto& [id, product]
+	ofstream out("products1.csv");
+	out << "Id;Name;Size;Consist;Price\n";
+	for (auto& [id, product] : products) {
+		out << id << ';' << product.name << ';' << product.size << ';';
+		for (uint32_t i = 0; i < product.consist.size() - 1; ++i) {
+			out << product.consist[i] << ','; 
+		}
+		out << product.consist[product.consist.size() - 1] << ';' << product.price << '\n';
+	}
+	out.close();
+}
+
+void saveStores(unordered_map<uint32_t, Store> stores)
+{
+	ofstream out("storeId1.txt");
+	for (auto& [id, store] : stores) {
+		out << id << '|' << store.name << '|' << 
+			store.address.index << ',' << store.address.city << ',' << store.address.street << ',' << store.address.house_number << '|' <<
+			store.capacity << '|';
+		uint32_t cnt = 0;
+		for (auto& [id, items] : store.sellers_items) {
+			if (!cnt++) out << '&';
+			out << id << ':';
+			for (uint32_t i = 0; i < items.size() - 1; ++i) {
+				out << items[i].product->id << ',' << items[i].quantity << ';';
+			}
+			out << items[items.size() - 1].product->id;
+		}
+		out << '\n';
+	}
+	out.close();
+}
+
+void saveSellers(unordered_map<uint32_t, Seller> sellers, unordered_map<uint32_t, Store> stores)
+{
+	ofstream out("sellerId1.txt");
+	for (auto& [id, seller] : sellers) {
+		out << id << '|' << seller.name << '|';
+		uint32_t cnt = 0;
+		for (auto& [store_id, store] : stores) {
+			if (stores.find(id) != stores.end()) out << (!cnt++ ? to_string(store_id) : "," + to_string(store_id));
+		}
+		out << '\n';
+	}
+	out.close();
 }
 
 void printStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, Seller> sellers)
@@ -225,6 +268,9 @@ int main()
 	loadProducts(products);
 	loadStores(stores, products);
 	loadSellers(sellers, stores);
+	saveProducts(products);
+	saveStores(stores);
+	saveSellers(sellers, stores);
 
 	uint32_t seller_id = 0;
 
