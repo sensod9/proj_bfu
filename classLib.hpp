@@ -1,4 +1,4 @@
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <string>
 
@@ -16,7 +16,7 @@ public:
 };
 
 struct Address {
-	uint32_t index;
+	string index;
 	string city;
 	string street;
 	uint32_t house_number;
@@ -31,18 +31,18 @@ struct Items {
 class Store
 {
 public:
-	Store(string name, Address address, double capacity, unordered_map<uint32_t, vector<Items>> sellers_items);
+	Store(string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items);
 	string name;
 	Address address;
 	double capacity;
-	unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
+	map<uint32_t, vector<Items>> sellers_items; // id,Items
 };
 
 class Seller
 {
 public:
-	Seller(string name, unordered_map<uint32_t, vector<Items>*> items);
+	Seller(string name, map<uint32_t, vector<Items>*> items);
 	string name;
-	unordered_map<uint32_t, vector<Items>*> items; // store id, Items
+	map<uint32_t, vector<Items>*> store_items; // store id, Items
 	string login;
 };

@@ -19,7 +19,7 @@ vector<string> splitToVector(string s, char delim = ',')
 	return v;
 }
 
-void loadProducts(unordered_map<uint32_t, Product>& products)
+void loadProducts(map<uint32_t, Product>& products)
 {
 	ifstream in("products.csv");
 	in.ignore(1024, '\n'); // Id;Name;Size;Consist
@@ -36,7 +36,7 @@ void loadProducts(unordered_map<uint32_t, Product>& products)
 	in.close();
 }
 
-void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, Product>& products)
+void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products)
 {
 	ifstream in("storeId.txt");
 
@@ -46,7 +46,7 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 		if (line.empty()) continue;
 		vector<string> params = splitToVector(line, '|');
 		vector<string> address = splitToVector(params[2], ',');
-		unordered_map<uint32_t, vector<Items>> sellers_items;
+		map<uint32_t, vector<Items>> sellers_items;
 
 		vector<Items> items;
 		vector<string> str_sellers = splitToVector(params[4], '&');
@@ -68,14 +68,14 @@ void loadStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, 
 			sellers_items.insert({stoul(temp[0]), items});
 		}
 		
-		stores.insert({stoul(params[0]), Store(params[1], Address{static_cast<uint32_t>(stoul(address[0])), address[1], address[2], static_cast<uint32_t>(stoul(address[3]))}, stod(params[3]), sellers_items)});
-			// unordered_map<uint32_t, vector<Items>> sellers_items; // id,Items
+		stores.insert({stoul(params[0]), Store(params[1], Address{address[0], address[1], address[2], stoul(address[3])}, stod(params[3]), sellers_items)});
+			// map<uint32_t, vector<Items>> sellers_items; // id,Items
 	}
 	
 	in.close();
 }
 
-void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_t, Store>& stores)
+void loadSellers(map<uint32_t, Seller>& sellers, map<uint32_t, Store>& stores)
 {
 	ifstream in("sellerId.txt");
 
@@ -86,7 +86,7 @@ void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_
 		vector<string> params = splitToVector(line, '|');
 		uint32_t seller_id = stoul(params[0]);
 
-		unordered_map<uint32_t, vector<Items>*> items;
+		map<uint32_t, vector<Items>*> items;
 		for (auto& store_id : splitToVector(params[2], ','))
 		{
 			auto store_it = stores.find(stoul(store_id));	
@@ -110,7 +110,7 @@ void loadSellers(unordered_map<uint32_t, Seller>& sellers, unordered_map<uint32_
 	in.close();
 }
 
-void saveProducts(unordered_map<uint32_t, Product> products)
+void saveProducts(map<uint32_t, Product> products)
 {
 	ofstream out("products1.csv");
 	out << "Id;Name;Size;Consist;Price\n";
@@ -124,7 +124,7 @@ void saveProducts(unordered_map<uint32_t, Product> products)
 	out.close();
 }
 
-void saveStores(unordered_map<uint32_t, Store> stores)
+void saveStores(map<uint32_t, Store> stores)
 {
 	ofstream out("storeId1.txt");
 	for (auto& [id, store] : stores) {
@@ -133,33 +133,33 @@ void saveStores(unordered_map<uint32_t, Store> stores)
 			store.capacity << '|';
 		uint32_t cnt = 0;
 		for (auto& [id, items] : store.sellers_items) {
-			if (!cnt++) out << '&';
+			if (cnt++) out << '&';
 			out << id << ':';
 			for (uint32_t i = 0; i < items.size() - 1; ++i) {
 				out << items[i].product->id << ',' << items[i].quantity << ';';
 			}
-			out << items[items.size() - 1].product->id;
+			out << items[items.size() - 1].product->id << ',' << items[items.size() - 1].quantity;
 		}
 		out << '\n';
 	}
 	out.close();
 }
 
-void saveSellers(unordered_map<uint32_t, Seller> sellers, unordered_map<uint32_t, Store> stores)
+void saveSellers(map<uint32_t, Seller> sellers, map<uint32_t, Store> stores)
 {
 	ofstream out("sellerId1.txt");
 	for (auto& [id, seller] : sellers) {
 		out << id << '|' << seller.name << '|';
 		uint32_t cnt = 0;
-		for (auto& [store_id, store] : stores) {
-			if (stores.find(id) != stores.end()) out << (!cnt++ ? to_string(store_id) : "," + to_string(store_id));
+		for (auto& [store_id, items] : seller.store_items) {
+			out << (!cnt++ ? to_string(store_id) : "," + to_string(store_id));
 		}
 		out << '\n';
 	}
 	out.close();
 }
 
-void printStores(unordered_map<uint32_t, Store>& stores, unordered_map<uint32_t, Seller> sellers)
+void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers)
 {
 	for (auto& [id, store] : stores) {
 		cout << endl << " ------------- " << endl;
@@ -210,10 +210,34 @@ uint32_t loginProc() {
 	}
 }
 
+void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers, uint32_t seller_id)
+{
+	Seller& seller = sellers[seller_id];
+
+	cout << "--- Store selection ---" << endl << "0. Cancel" << endl;
+	uint32_t i = 1, flag;
+	for (auto& [id, items] : seller.store_items) {
+		cout << i << ". " << stores[id].name << endl;
+		++i;
+	}
+	cout << " : ";
+
+	cin >> flag;
+	if (!flag || flag >= i) return;
+	
+	cout << endl << "--- Item selection ---";
+	// Store store = next(stores.begin(), flag - 1)->second;
+
+	i = 1;
+	for (auto& items : *next(seller.store_items.begin(), flag - 1)->second) {
+		// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
+	}
+}
+
 uint32_t enterMenu(uint32_t& seller_id,
-	unordered_map<uint32_t, Product>& products,
-	unordered_map<uint32_t, Store>& stores,
-	unordered_map<uint32_t, Seller>& sellers)
+	map<uint32_t, Product>& products,
+	map<uint32_t, Store>& stores,
+	map<uint32_t, Seller>& sellers)
 {
 	uint32_t flag;
 	cout << endl << "--- Menu ---" << endl;
@@ -251,9 +275,11 @@ uint32_t enterMenu(uint32_t& seller_id,
 				printStores(stores, sellers);
 				break;
 			case 2:
-				seller_id = loginProc();
+				seller_id = 0;
 				break;
-			case 3:
+			case 5:
+				takeOut(stores, sellers, seller_id);
+			case 6:
 				return true;
 		}
 	}
@@ -262,9 +288,9 @@ uint32_t enterMenu(uint32_t& seller_id,
 
 int main()
 {
-	unordered_map<uint32_t, Product> products;
-	unordered_map<uint32_t, Store> stores;
-	unordered_map<uint32_t, Seller> sellers;
+	map<uint32_t, Product> products;
+	map<uint32_t, Store> stores;
+	map<uint32_t, Seller> sellers;
 	loadProducts(products);
 	loadStores(stores, products);
 	loadSellers(sellers, stores);
