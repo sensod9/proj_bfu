@@ -145,7 +145,7 @@ void saveStores(map<uint32_t, Store> stores)
 	out.close();
 }
 
-void saveSellers(map<uint32_t, Seller> sellers, map<uint32_t, Store> stores)
+void saveSellers(map<uint32_t, Seller> sellers)
 {
 	ofstream out("sellerId1.txt");
 	for (auto& [id, seller] : sellers) {
@@ -210,28 +210,67 @@ uint32_t loginProc() {
 	}
 }
 
-void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers, uint32_t seller_id)
+void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, uint32_t seller_id)
 {
-	Seller& seller = sellers[seller_id];
+	Seller* seller_ptr;
+	auto seller_it = sellers.find(seller_id);
+	if (seller_it != sellers.end())
+		seller_ptr = &(seller_it->second);
+	else return;
+	Seller& seller = *seller_ptr;
 
-	cout << "--- Store selection ---" << endl << "0. Cancel" << endl;
-	uint32_t i = 1, flag;
+	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
+	uint32_t i = 1, store_index;
 	for (auto& [id, items] : seller.store_items) {
-		cout << i << ". " << stores[id].name << endl;
+		auto store_it = stores.find(id);
+		if (store_it != stores.end()) {
+			cout << i << ". " << store_it->second.name << endl;
+		}
 		++i;
 	}
 	cout << " : ";
 
-	cin >> flag;
-	if (!flag || flag >= i) return;
+	cin >> store_index;
+	if (!store_index || store_index >= i) return;
+	--store_index;
+
+	vector<Items>& items_in_store = *(next(seller.store_items.begin(), store_index)->second);
 	
-	cout << endl << "--- Item selection ---";
-	// Store store = next(stores.begin(), flag - 1)->second;
+	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 
 	i = 1;
-	for (auto& items : *next(seller.store_items.begin(), flag - 1)->second) {
-		// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
+	for (auto& items : items_in_store) {
+		cout << i << ". " << items.product->name << ", " << items.quantity << endl;
+		++i;
 	}
+	cout << " : ";
+
+	uint32_t item_index;
+	cin >> item_index;
+	if (!item_index || item_index >= i) return;
+	--item_index;
+
+	uint32_t decrease;
+	cout << endl << "How much? : ";
+	cin >> decrease;
+
+	// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
+
+	if (!decrease) return;
+	else if (decrease < items_in_store[item_index].quantity) {
+		items_in_store[item_index].quantity -= decrease;
+	}
+	else {
+		if (items_in_store.size() <= 1) {
+			next(stores.begin(), store_index)->second.sellers_items.erase(seller_id);
+			seller.store_items.erase(next(seller.store_items.begin(), store_index));
+		}
+		else {
+			items_in_store.erase(items_in_store.begin() + item_index);
+		}
+	}
+	
+	cout << "Done." << endl;
 }
 
 uint32_t enterMenu(uint32_t& seller_id,
@@ -279,6 +318,9 @@ uint32_t enterMenu(uint32_t& seller_id,
 				break;
 			case 5:
 				takeOut(stores, sellers, seller_id);
+				saveStores(stores);
+				saveSellers(sellers);
+				break;
 			case 6:
 				return true;
 		}
@@ -296,7 +338,7 @@ int main()
 	loadSellers(sellers, stores);
 	saveProducts(products);
 	saveStores(stores);
-	saveSellers(sellers, stores);
+	saveSellers(sellers);
 
 	uint32_t seller_id = 0;
 
