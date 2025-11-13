@@ -2,6 +2,7 @@
 #include <functional>
 			
 #include <fstream>
+#include <set>
 #include <sstream>
 #include "classLib.hpp"
 
@@ -192,15 +193,15 @@ uint32_t loginProc() {
 
 	hash<string> hasher;
 	for (;;) {
-		string login, password;
+		string login, password, salt = "lololol999";
 
 		cout << endl << "Login: "; 
 		cin >> login;
 		if (login == "0") return 0;
 		cout << "Password: "; 
 		cin >> password;
-		uint64_t h_login = hasher(login);
-		uint64_t h_password = hasher(password);
+		uint64_t h_login = hasher(login + salt);
+		uint64_t h_password = hasher(password + salt);
 		for (auto& seller : sellers) {
 			if (h_login == stoull(seller[0]) && h_password == stoull(seller[1])) {
 				return stoull(seller[2]);				
@@ -210,14 +211,103 @@ uint32_t loginProc() {
 	}
 }
 
-void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, uint32_t seller_id)
+Seller* findSeller(map<uint32_t, Seller>& sellers, uint32_t seller_id) // modules/utils.cpp ?
 {
 	Seller* seller_ptr;
 	auto seller_it = sellers.find(seller_id);
 	if (seller_it != sellers.end())
 		seller_ptr = &(seller_it->second);
-	else return;
-	Seller& seller = *seller_ptr;
+	else return nullptr;
+	return seller_ptr;
+}
+
+void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, uint32_t seller_id)
+{ // выбор из имеющихся айтемов его
+	Seller& seller = *findSeller(sellers, seller_id);
+	
+	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
+	uint32_t i = 1, store_index;
+	for (auto& [id, store] : stores) {
+		cout << i << ". " << store.name << endl;
+		++i;
+	}
+	cout << " : ";
+
+	cin >> store_index;
+	if (!store_index || store_index >= i) return;
+	--store_index;
+	// мы уже нашли стор поэтому не важно как добыть айтемы
+	set<pair<uint32_t, string>> seller_items;
+
+	// короче где то здесь Store ищет в мапе и ошибку даёт без проверки
+	for (auto& [store_id, items] : seller.store_items)
+	{
+		for (auto& item : *items)
+		{
+			seller_items.insert({item.product->id, item.product->name});
+		}
+	}
+
+	Store& store = next(stores.begin(), store_index)->second;
+	vector<Items>& items_in_store = store.sellers_items[seller_id];
+	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
+	
+	i = 1;
+	for (auto& [item_id, item_name] : seller_items)
+	{
+		cout << i << ". " << item_name << endl;
+		++i;
+	}
+	cout << i << ". Add new item" << endl << " : ";
+
+	uint32_t item_index;
+	cin >> item_index;
+	if (!item_index || item_index > i) return;
+	else {
+		--item_index;
+		Product* product_ptr;
+		
+		bool newCreated = false;
+		uint32_t increase = 2;
+		if (item_index == i) {
+			cout << endl << "--- New item ---" << endl;
+			uint32_t price, id = products.rbegin()->first + 1;
+			string name, consist_str;
+			double size;
+			vector<string> consist;
+
+			cout << "Name: ";
+			cin >> name;
+			cout << "Size: ";
+			cin >> size;
+			cout << "Consists of (comma-separated): ";
+			cin >> consist_str;
+			consist = splitToVector(consist_str, ',');
+			cout << "Price: ";
+			cin >> price;
+
+			products.insert({id, Product(id, name, size, consist, price)});
+			newCreated = true;
+		}
+		product_ptr = &products[next(seller_items.begin(), item_index)->first];
+		
+		if (!newCreated)
+			for (auto& item : items_in_store)
+			{
+				if (item.product == product_ptr) {
+					item.quantity += increase;
+					cout << "Done." << endl;
+					return;
+				}
+			}
+		
+		items_in_store.push_back(Items(product_ptr, increase));
+	}
+}
+
+void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, uint32_t seller_id)
+{ // убрать айтем из products если его нет больше нигде
+	Seller& seller = *findSeller(sellers, seller_id);
 
 	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
 	uint32_t i = 1, store_index;
@@ -234,7 +324,9 @@ void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, uint3
 	if (!store_index || store_index >= i) return;
 	--store_index;
 
-	vector<Items>& items_in_store = *(next(seller.store_items.begin(), store_index)->second);
+	Store& store = stores[next(seller.store_items.begin(), store_index)->first];
+	vector<Items>& items_in_store = store.sellers_items[seller_id];
+	//*(next(seller.store_items.begin(), store_index)->second);
 	
 	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 
@@ -257,17 +349,20 @@ void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, uint3
 	// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
 
 	if (!decrease) return;
-	else if (decrease < items_in_store[item_index].quantity) {
+	else if (decrease < items_in_store[item_index].quantity)
+	{
 		items_in_store[item_index].quantity -= decrease;
 	}
 	else {
 		if (items_in_store.size() <= 1) {
-			next(stores.begin(), store_index)->second.sellers_items.erase(seller_id);
+			store.sellers_items.erase(seller_id);
 			seller.store_items.erase(next(seller.store_items.begin(), store_index));
 		}
 		else {
 			items_in_store.erase(items_in_store.begin() + item_index);
 		}
+		// УДАЛИ ИЗ ПРОДАКТОВ!!!!!! (да это после всего)
+		// АКТУАЛЬНО !!!! ТОЛЬКО чекнуть надо нет ли в других магазах айтема. ну то же самое с указателем бэссикли сверху есть проверка в депозите
 	}
 	
 	cout << "Done." << endl;
@@ -305,7 +400,7 @@ uint32_t enterMenu(uint32_t& seller_id,
 		cout << "1. View stores" << endl;
 		cout << "2. Log out" << endl;
 		cout << "3. Move items" << endl;
-		cout << "3. Deposit items" << endl;
+		cout << "4. Deposit items" << endl;
 		cout << "5. Take out items" << endl;
 		cout << "6. Exit app" << endl << " : ";
 		cin >> flag;
@@ -316,8 +411,11 @@ uint32_t enterMenu(uint32_t& seller_id,
 			case 2:
 				seller_id = 0;
 				break;
+				// депозит через создание айтема (прям конструктором новый айтем) количество далее запихиваем на склад и если там не было айтемов продавца то закидываем указатель на массив к продавцу И В ГЛОБАЛЬНЫЙ ПРОДАКТС ЗАКИДЫВАЕМ АЙТЕМ
+			case 4:
+
 			case 5:
-				takeOut(stores, sellers, seller_id);
+				takeOut(stores, sellers, products, seller_id); // УДАЛИ АЙТЕМ ИЗ ПРОДАКТОВ!!!!!!!!
 				saveStores(stores);
 				saveSellers(sellers);
 				break;
