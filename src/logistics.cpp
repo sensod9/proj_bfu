@@ -57,7 +57,7 @@ uint32_t loginProc() {
 	}
 }
 
-void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, uint32_t seller_id)
+void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, map<uint32_t, vector<Product*>> products_by_sellers, uint32_t seller_id)
 { // выбор из имеющихся айтемов его
 	Seller& seller = sellers.at(seller_id);
 	
@@ -73,25 +73,20 @@ void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<u
 	if (!store_index || store_index >= i) return;
 	--store_index;
 	// мы уже нашли стор поэтому не важно как добыть айтемы
-	set<pair<uint32_t, string>> seller_items;
-
-	// короче где то здесь Store ищет в мапе и ошибку даёт без проверки
-	for (auto& [store_id, items] : seller.store_items)
-	{
-		for (auto& item : *items)
-		{
-			seller_items.insert({item.product->id, item.product->name});
-		}
-	}
+	// set<pair<uint32_t, string>> seller_items;
+	vector<Product*>* seller_products_ptr;
+	auto seller_products_it = products_by_sellers.find(seller_id);
+	if (seller_products_it != products_by_sellers.end())
+		seller_products_ptr = &seller_products_it->second;
 
 	Store& store = next(stores.begin(), store_index)->second;
-	vector<Items>& items_in_store = store.sellers_items[seller_id];
+	vector<Items>& items_in_store = store.sellers_items.at(seller_id);
 	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 	
 	i = 1;
-	for (auto& [item_id, item_name] : seller_items)
+	for (auto& product_ptr : *seller_products_ptr)
 	{
-		cout << i << ". " << item_name << endl;
+		cout << i << ". " << product_ptr->name << endl;
 		++i;
 	}
 	cout << i << ". Add new item" << endl << " : ";
@@ -122,22 +117,33 @@ void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<u
 			cout << "Price: ";
 			cin >> price;
 
-			products.insert({id, Product(id, name, size, consist, seller_id, price)});
+			Product product = Product(id, name, size, consist, seller_id, price);
+			products.insert({id, product});
+
+			auto seller_products_it = products_by_sellers.find(seller_id);
+			if (seller_products_it != products_by_sellers.end()) {
+				seller_products_it->second.push_back(&products.at(product.id));
+			}
+			else {
+				products_by_sellers.insert({product.seller_id, vector<Product*>(1, &products.at(product.id))});
+			}
 			newCreated = true;
 		}
-		product_ptr = &products.at(next(seller_items.begin(), item_index)->first);
+		product_ptr = *next(seller_products_ptr->begin(), item_index);
 		
-		if (!newCreated)
+		if (!newCreated) {
 			for (auto& item : items_in_store)
 			{
 				if (item.product == product_ptr) {
 					item.quantity += increase;
-					cout << "Done." << endl;
-					return;
+					break;
 				}
 			}
-		
-		items_in_store.push_back(Items(product_ptr, increase));
+		}
+		else {
+			items_in_store.push_back(Items(product_ptr, increase));
+		}
+		cout << "Done." << endl;
 	}
 }
 
@@ -216,6 +222,7 @@ void takeOut(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<u
 
 uint32_t enterMenu(uint32_t& seller_id,
 	map<uint32_t, Product>& products,
+	map<uint32_t, vector<Product*>> products_by_sellers,
 	map<uint32_t, Store>& stores,
 	map<uint32_t, Seller>& sellers)
 {
@@ -256,7 +263,8 @@ uint32_t enterMenu(uint32_t& seller_id,
 				break;
 				// депозит через создание айтема (прям конструктором новый айтем) количество далее запихиваем на склад и если там не было айтемов продавца то закидываем указатель на массив к продавцу И В ГЛОБАЛЬНЫЙ ПРОДАКТС ЗАКИДЫВАЕМ АЙТЕМ
 			case 4:
-
+				deposit(stores, sellers, products, products_by_sellers, seller_id);
+				break;
 			case 5:
 				takeOut(stores, sellers, products, seller_id); // УДАЛИ АЙТЕМ ИЗ ПРОДАКТОВ!!!!!!!!
 				saveStores(stores);
@@ -285,5 +293,5 @@ int main()
 	uint32_t seller_id = 0;
 
 	for (;;)
-		if (enterMenu(seller_id, products, stores, sellers)) return 0;
+		if (enterMenu(seller_id, products, products_by_sellers, stores, sellers)) return 0;
 }
