@@ -1,10 +1,10 @@
 #include <iostream>
 #include <functional>
 #include <fstream>
-#include <set>
 
 #include "../include/classLib.hpp"
 #include "../include/utils.hpp"
+#include "../include/login.hpp"
 
 using namespace std;
 
@@ -24,36 +24,6 @@ void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) //
 				cout << "Item name: "<< item.product->name << ", size: " << item.product->size << ", quantity: " << item.quantity << endl;
 			}
 		}
-	}
-}
-
-uint32_t loginProc() {
-	ifstream in("db.txt");
-	vector<vector<string>> sellers; 
-	string line;
-	while (getline(in, line))
-	{
-		sellers.push_back(splitToVector(line, '|'));
-	}
-	in.close();
-
-	hash<string> hasher;
-	for (;;) {
-		string login, password, salt = "lololol999";
-
-		cout << endl << "Login: "; 
-		cin >> login;
-		if (login == "0") return 0;
-		cout << "Password: "; 
-		cin >> password;
-		uint64_t h_login = hasher(login + salt);
-		uint64_t h_password = hasher(password + salt);
-		for (auto& seller : sellers) {
-			if (h_login == stoull(seller[0]) && h_password == stoull(seller[1])) {
-				return stoull(seller[2]);				
-			}
-		}
-		cout << "Incorrect. Try Again" << endl;
 	}
 }
 
@@ -239,7 +209,7 @@ uint32_t enterMenu(uint32_t& seller_id,
 				printStores(stores, sellers);
 				break;
 			case 2:
-				seller_id = loginProc();
+				seller_id = loginSellerProc();
 				break;
 			case 3:
 				return 1;
