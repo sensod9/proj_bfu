@@ -1,7 +1,7 @@
-#include "classLib.hpp"
+#include "../include/classLib.hpp"
 
-Product::Product(uint32_t id, string name, double size, vector<string> consist, uint32_t price)
-	: id(id), name(name), size(size), consist(consist), price(price)
+Product::Product(uint32_t id, string name, double size, vector<string> consist, uint32_t seller_id, uint32_t price)
+	: id(id), name(name), size(size), consist(consist), seller_id(seller_id), price(price)
 {}
 
 Store::Store(string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items)

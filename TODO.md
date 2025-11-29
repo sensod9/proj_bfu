@@ -1,6 +1,0 @@
-g++ -o logistics.exe logistics.cpp classLib.cpp -I.
-в cmake
-14049827386060544015 - parol_kek
-7660279150904980609 - lol1
-17979840917474917689 - prik
-17752559023784766353 - kek777

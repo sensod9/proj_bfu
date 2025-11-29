@@ -11,4 +11,5 @@ set(EXECUTABLE_OUTPUT_PATH ".")
 add_executable(main
 	logistics.cpp
 	classLib.cpp
+	utils.cpp
 )

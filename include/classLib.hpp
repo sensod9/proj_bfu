@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <vector>
 #include <string>
@@ -7,11 +9,12 @@ using namespace std;
 class Product
 {
 public:
-	Product(uint32_t id, string name, double size, vector<string> consist, uint32_t price);
+	Product(uint32_t id, string name, double size, vector<string> consist, uint32_t seller_id, uint32_t price);
 	uint32_t id;
 	string name;
 	double size;
 	vector<string> consist;
+	uint32_t seller_id;
 	uint32_t price;
 };
 
