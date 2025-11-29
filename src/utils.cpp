@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <set>
 #include <sstream>
 
 #include "../include/utils.hpp"
@@ -16,7 +17,7 @@ vector<string> splitToVector(string s, char delim)
 	return v;
 }
 
-void loadProducts(map<uint32_t, Product>& products, map<uint32_t, vector<Product*>>& products_by_sellers, string path)
+void loadProducts(map<uint32_t, Product>& products, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, string path)
 {
 	ifstream in(path);
 	in.ignore(1024, '\n'); // Id;Name;Size;Consist
@@ -30,19 +31,22 @@ void loadProducts(map<uint32_t, Product>& products, map<uint32_t, vector<Product
 		Product product = Product(stoul(params[0]), params[1], stod(params[2]), splitToVector(params[3], ','), stoul(params[4]), stoul(params[5]));
 		products.insert({stoul(params[0]), product});
 
-		auto seller_products_it = products_by_sellers.find(product.seller_id);
-		if (seller_products_it != products_by_sellers.end()) {
-			seller_products_it->second.push_back(&products.at(product.id));
+		auto seller_products_it = items_by_sellers.find(product.seller_id);
+		if (seller_products_it != items_by_sellers.end()) {
+			seller_products_it->second.insert({product.id, {Items(&products.at(product.id), 0), {} }});
 		}
 		else {
-			products_by_sellers.insert({product.seller_id, vector<Product*>(1, &products.at(product.id))});
+			items_by_sellers.insert({product.seller_id, 
+				map<uint32_t, pair<Items, set<uint32_t>>>{{product.id,
+					{Items(&products.at(product.id), 0), {} }}}});
 		}
+		// инициализировали все айтемы, количество посчитаем в loadStores, там же занесём в сет айди складов
 	}
 	
 	in.close();
 }
 
-void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products, string path)
+void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, string path)
 {
 	ifstream in(path);
 
@@ -51,6 +55,7 @@ void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products, 
 	{
 		if (line.empty()) continue;
 		vector<string> params = splitToVector(line, '|');
+		uint32_t store_id = stoul(params[0]);
 		vector<string> address = splitToVector(params[2], ',');
 		map<uint32_t, vector<Items>> sellers_items;
 
@@ -58,15 +63,19 @@ void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products, 
 		for (auto& str_item : str_items) {
 			vector<string> temp = splitToVector(str_item, ',');
 			Product& product = products.at(stoul(temp[0]));
-			Items items = Items(&product, stoul(temp[1]));
+			uint32_t quantity = stoul(temp[1]);
+			Items items = Items(&product, quantity);
 
 			auto seller_items_it = sellers_items.find(product.seller_id);
 			if (seller_items_it != sellers_items.end()) {
 				seller_items_it->second.push_back(items);
 			}
 			else {
-				sellers_items.insert({product.seller_id, vector<Items>(1, items)});
+				sellers_items.insert({product.seller_id, vector<Items>{items}});
 			}
+			
+			items_by_sellers.at(product.seller_id).at(product.id).second.insert(store_id);
+			items_by_sellers.at(product.seller_id).at(product.id).first.quantity += quantity;
 		}
 		/*
 		vector<string> str_sellers = splitToVector(params[4], '&');
@@ -89,7 +98,7 @@ void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products, 
 		}
 		*/
 		
-		stores.insert({stoul(params[0]), Store(params[1], Address{address[0], address[1], address[2], stoul(address[3])}, stod(params[3]), sellers_items)});
+		stores.insert({store_id, Store(params[1], Address{address[0], address[1], address[2], stoul(address[3])}, stod(params[3]), sellers_items)});
 			// map<uint32_t, vector<Items>> sellers_items; // id,Items
 	}
 	
