@@ -27,21 +27,41 @@ void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) //
 	}
 }
 
-void depositItems(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, uint32_t seller_id)
-{ // выбор из имеющихся айтемов его
-	Seller& seller = sellers.at(seller_id);
-	
-	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
+uint32_t storeSelection(map<uint32_t, Store>& stores, Seller& seller, bool allStores = true)
+{
 	uint32_t i = 1, store_index;
-	for (auto& [id, store] : stores) {
-		cout << i << ". " << store.name << endl;
-		++i;
+	if (allStores) {
+		for (auto& [id, store] : stores) {
+			cout << i << ". " << store.name << endl;
+			++i;
+		}
+	}
+	else {
+		for (auto& [id, items] : seller.store_items) {
+			Store& store = stores.at(id);
+			cout << i << ". " << store.name << endl;
+			++i;
+		}
 	}
 	cout << " : ";
 
 	cin >> store_index;
-	if (!store_index || store_index >= i) return;
-	--store_index;
+	if (!store_index || store_index >= i) return 0;
+	return store_index - 1;
+}
+
+void depositItems(
+	map<uint32_t, Store>& stores,
+	map<uint32_t, Seller>& sellers,
+	map<uint32_t, Product>& products,
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
+	uint32_t seller_id)
+{ // выбор из имеющихся айтемов его
+	Seller& seller = sellers.at(seller_id);
+	
+	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
+	uint32_t store_index = storeSelection(stores, seller, true);
+	if (!store_index) return;
 
 	map<uint32_t, pair<Items, set<uint32_t>>>* seller_items_ptr;
 	auto seller_items_it = items_by_sellers.find(seller_id);
@@ -51,9 +71,10 @@ void depositItems(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, 
 	auto& store_pair = *next(stores.begin(), store_index);
 	uint32_t store_id = store_pair.first;
 	Store& store = store_pair.second;
+
 	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 	
-	i = 1;
+	uint32_t i = 1;
 	for (auto& [product_id, pair] : *seller_items_ptr)
 	{
 		cout << i << ". " << pair.first.product->name << endl;
@@ -100,7 +121,7 @@ void depositItems(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, 
 
 		product_ptr = next(seller_items_ptr->begin(), item_index)->second.first.product;
 		
-		LogisticsCore::depositItems(product_ptr, increase, seller, store, items_by_sellers);
+		LogisticsCore::deposit(product_ptr, increase, seller, store, items_by_sellers);
 
 		cout << "Done." << endl;
 	}
@@ -120,24 +141,16 @@ void takeOutItems(
 	}
 
 	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
-	uint32_t i = 1, store_index;
-	for (auto& [id, items] : seller.store_items) {
-		Store& store = stores.at(id);
-		cout << i << ". " << store.name << endl;
-		++i;
-	}
-	cout << " : ";
+	uint32_t store_index = storeSelection(stores, seller, false);
+	if (!store_index) return;
 
-	cin >> store_index;
-	if (!store_index || store_index >= i) return;
-	--store_index;
-
-	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 	uint32_t store_id = next(seller.store_items.begin(), store_index)->first;
 	Store& store = stores.at(store_id);
+
+	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 	vector<Items>& items_in_store = store.sellers_items[seller_id];
 
-	i = 1;
+	uint32_t i = 1;
 	for (auto& items : items_in_store) {
 		cout << i << ". " << items.product->name << ", " << items.quantity << endl;
 		++i;
@@ -156,7 +169,61 @@ void takeOutItems(
 	// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
 
 	Product* product_ptr = items_in_store[item_index].product;
-	LogisticsCore::takeOutItems(product_ptr, decrease, seller, store, items_by_sellers);
+	LogisticsCore::takeOut(product_ptr, decrease, seller, store, items_by_sellers);
+	
+	cout << "Done." << endl;
+}
+
+void moveItems(
+	map<uint32_t, Store>& stores,
+	map<uint32_t, Seller>& sellers,
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
+	uint32_t seller_id)
+{
+	Seller& seller = sellers.at(seller_id);
+	
+	if (seller.store_items.empty()) {
+		cout << "You don't have any items in stores. Deposit some first";
+		return;
+	}
+
+	cout << endl << "--- Store selection (FROM) ---" << endl << "0. Cancel" << endl;
+	uint32_t store_index_from = storeSelection(stores, seller, false);
+	if (!store_index_from) return;
+
+	cout << endl << "--- Store selection (TO) ---" << endl << "0. Cancel" << endl;
+	uint32_t store_index_to = storeSelection(stores, seller, true);
+	if (!store_index_to || store_index_from == store_index_to) return;
+
+	uint32_t store_from_id = next(seller.store_items.begin(), store_index_from)->first;
+	Store& store_from = stores.at(store_from_id);
+	uint32_t store_to_id = next(seller.store_items.begin(), store_index_to)->first;
+	Store& store_to = stores.at(store_to_id);
+
+	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
+	vector<Items>& items_in_store = store_from.sellers_items[seller_id];
+
+	uint32_t i = 1;
+	for (auto& items : items_in_store) {
+		cout << i << ". " << items.product->name << ", " << items.quantity << endl;
+		++i;
+	}
+	cout << " : ";
+
+	uint32_t item_index;
+	cin >> item_index;
+	if (!item_index || item_index >= i) return;
+	--item_index;
+
+	uint32_t count;
+	cout << endl << "How much? : ";
+	cin >> count;
+
+	// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
+
+	Product* product_ptr = items_in_store[item_index].product;
+	LogisticsCore::takeOut(product_ptr, count, seller, store_from, items_by_sellers);
+	LogisticsCore::deposit(product_ptr, count, seller, store_to, items_by_sellers);
 	
 	cout << "Done." << endl;
 }
@@ -203,7 +270,9 @@ int enterMenu(uint32_t& seller_id,
 				seller_id = 0;
 				break;
 			case 3:
-				//moveItems();
+				moveItems(stores, sellers, items_by_sellers, seller_id);
+				saveStores(stores);
+				saveSellers(sellers);
 				break;
 			case 4:
 				depositItems(stores, sellers, products, items_by_sellers, seller_id);

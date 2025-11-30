@@ -1,19 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="L:\SCR\_BFU\proj_bfu\logistics.cpp">
+    <ClCompile Include="L:\SCR\_BFU_OP\proj_bfu\src\login.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="L:\SCR\_BFU\proj_bfu\classLib.cpp">
+    <ClCompile Include="L:\SCR\_BFU_OP\proj_bfu\src\logistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="L:\SCR\_BFU_OP\proj_bfu\src\classLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="L:\SCR\_BFU_OP\proj_bfu\src\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="L:\SCR\_BFU_OP\proj_bfu\src\StoresAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="L:\SCR\_BFU_OP\proj_bfu\src\LogisticsCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="L:\SCR\_BFU\proj_bfu\CMakeLists.txt" />
+    <CustomBuild Include="L:\SCR\_BFU_OP\proj_bfu\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{6623E840-8887-39FA-A94C-E0CAAB725536}</UniqueIdentifier>
+      <UniqueIdentifier>{5F7735E2-0A03-3EE1-BCAD-A0BDB9E993ED}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

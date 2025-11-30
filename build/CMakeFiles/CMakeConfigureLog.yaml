@@ -90,9 +90,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "message-v1"
     backtrace:
@@ -109,9 +109,9 @@ events:
       The output was:
       0
       MSBuild version 17.14.0-preview-25127-07+c012996cf for .NET Framework
-      Build started 10/16/2025 4:34:26 PM.
+      Build started 11/30/2025 5:44:50 PM.
       
-      Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
+      Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
         Creating directory "Debug\\".
         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
@@ -124,7 +124,7 @@ events:
         CMakeCCompilerId.c
       Link:
         L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
-        CompilerIdC.vcxproj -> L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdC\\CompilerIdC.exe
+        CompilerIdC.vcxproj -> L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdC\\CompilerIdC.exe
       PostBuildEvent:
         for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
         :VCEnd
@@ -132,13 +132,13 @@ events:
       FinalizeBuildStatus:
         Deleting file "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
         Touching "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
-      Done Building Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdC\\CompilerIdC.vcxproj" (default targets).
+      Done Building Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdC\\CompilerIdC.vcxproj" (default targets).
       
       Build succeeded.
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:22.91
+      Time Elapsed 00:00:01.84
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -146,7 +146,7 @@ events:
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
       
       The C compiler identification is MSVC, found in:
-        L:/SCR/_BFU/proj_bfu/build/CMakeFiles/4.1.1/CompilerIdC/CompilerIdC.exe
+        L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/4.1.1/CompilerIdC/CompilerIdC.exe
       
   -
     kind: "find-v1"
@@ -216,9 +216,9 @@ events:
       - "C:/Users/User/scoop/shims/"
       - "L:/Program Files (x86)/bin/"
       - "C:/ProgramData/chocolatey/lib/deno/"
-      - "L:/Program Files/LLVM/bin/"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
     searched_directories:
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/link.com"
     found: "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/link.exe"
@@ -279,9 +279,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "find-v1"
     backtrace:
@@ -350,9 +350,9 @@ events:
       - "C:/Users/User/scoop/shims/"
       - "L:/Program Files (x86)/bin/"
       - "C:/ProgramData/chocolatey/lib/deno/"
-      - "L:/Program Files/LLVM/bin/"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
     searched_directories:
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lld-link.com"
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lld-link.exe"
@@ -492,8 +492,16 @@ events:
       - "C:/ProgramData/chocolatey/lib/deno/lld-link.com"
       - "C:/ProgramData/chocolatey/lib/deno/lld-link.exe"
       - "C:/ProgramData/chocolatey/lib/deno/lld-link"
-      - "L:/Program Files/LLVM/bin/lld-link.com"
-    found: "L:/Program Files/LLVM/bin/lld-link.exe"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/lld-link.com"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/lld-link.exe"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/lld-link"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/lld-link.com"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/lld-link.exe"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/lld-link"
+      - "L:/Program/LLVM/bin/lld-link.com"
+      - "L:/Program/LLVM/bin/lld-link.exe"
+      - "L:/Program/LLVM/bin/lld-link"
+    found: false
     search_context:
       ENV{PATH}:
         - "C:\\Program Files\\PowerShell\\7"
@@ -551,9 +559,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "find-v1"
     backtrace:
@@ -620,9 +628,9 @@ events:
       - "C:/Users/User/scoop/shims/"
       - "L:/Program Files (x86)/bin/"
       - "C:/ProgramData/chocolatey/lib/deno/"
-      - "L:/Program Files/LLVM/bin/"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
     searched_directories:
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/link.com"
     found: "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/link.exe"
@@ -683,9 +691,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "find-v1"
     backtrace:
@@ -752,9 +760,9 @@ events:
       - "C:/Users/User/scoop/shims/"
       - "L:/Program Files (x86)/bin/"
       - "C:/ProgramData/chocolatey/lib/deno/"
-      - "L:/Program Files/LLVM/bin/"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
     searched_directories:
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/mt.com"
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/mt.exe"
@@ -894,15 +902,15 @@ events:
       - "C:/ProgramData/chocolatey/lib/deno/mt.com"
       - "C:/ProgramData/chocolatey/lib/deno/mt.exe"
       - "C:/ProgramData/chocolatey/lib/deno/mt"
-      - "L:/Program Files/LLVM/bin/mt.com"
-      - "L:/Program Files/LLVM/bin/mt.exe"
-      - "L:/Program Files/LLVM/bin/mt"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/mt.com"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/mt.exe"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/mt"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/mt.com"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/mt.exe"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/mt"
+      - "L:/Program/LLVM/bin/mt.com"
+      - "L:/Program/LLVM/bin/mt.exe"
+      - "L:/Program/LLVM/bin/mt"
     found: false
     search_context:
       ENV{PATH}:
@@ -961,9 +969,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "find-v1"
     backtrace:
@@ -1030,9 +1038,9 @@ events:
       - "C:/Users/User/scoop/shims/"
       - "L:/Program Files (x86)/bin/"
       - "C:/ProgramData/chocolatey/lib/deno/"
-      - "L:/Program Files/LLVM/bin/"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
     searched_directories:
       - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lib.com"
     found: "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lib.exe"
@@ -1093,9 +1101,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "find-v1"
     backtrace:
@@ -1178,9 +1186,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "message-v1"
     backtrace:
@@ -1197,9 +1205,9 @@ events:
       The output was:
       0
       MSBuild version 17.14.0-preview-25127-07+c012996cf for .NET Framework
-      Build started 10/16/2025 4:34:54 PM.
+      Build started 11/30/2025 5:44:53 PM.
       
-      Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
+      Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
         Creating directory "Debug\\".
         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
@@ -1212,7 +1220,7 @@ events:
         CMakeCXXCompilerId.cpp
       Link:
         L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
-        CompilerIdCXX.vcxproj -> L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdCXX\\CompilerIdCXX.exe
+        CompilerIdCXX.vcxproj -> L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdCXX\\CompilerIdCXX.exe
       PostBuildEvent:
         for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
         :VCEnd
@@ -1220,13 +1228,13 @@ events:
       FinalizeBuildStatus:
         Deleting file "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
         Touching "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
-      Done Building Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" (default targets).
+      Done Building Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\4.1.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" (default targets).
       
       Build succeeded.
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:18.86
+      Time Elapsed 00:00:02.11
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -1234,8 +1242,288 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
       
       The CXX compiler identification is MSVC, found in:
-        L:/SCR/_BFU/proj_bfu/build/CMakeFiles/4.1.1/CompilerIdCXX/CompilerIdCXX.exe
+        L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/4.1.1/CompilerIdCXX/CompilerIdCXX.exe
       
+  -
+    kind: "find-v1"
+    backtrace:
+      - "L:/Program Files/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "L:/Program Files/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
+      - "L:/Program Files/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
+      - "L:/Program Files/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lld-link"
+    candidate_directories:
+      - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Program Files/glzr.io/GlazeWM/cli/"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/java8path/"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/javapath/"
+      - "C:/Users/User/AppData/Local/oh-my-posh/"
+      - "C:/Python311/Scripts/"
+      - "C:/Python311/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/ProgramData/Oracle/Java/javapath/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "L:/Program Files/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/Fortect/"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/Scripts/"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/"
+      - "C:/Users/User/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/User/.dotnet/tools/"
+      - "E:/Program Files/Microsoft VS Code/bin/"
+      - "E:/Program Files/FreeArc/bin/"
+      - "C:/Users/User/AppData/Roaming/npm/"
+      - "C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/"
+      - "C:/tools/neovim/nvim-win64/bin/"
+      - "L:/P/"
+      - "C:/Program Files (x86)/WiX Toolset v3.14/bin/"
+      - "C:/Program Files/Git/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "L:/Program Files/Git/cmd/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "L:/Program Files/php/"
+      - "C:/ProgramData/ComposerSetup/bin/"
+      - "L:/Program Files/bin/"
+      - "C:/Users/User/.cargo/bin/"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Scripts/"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Library/bin/"
+      - "C:/Users/User/scoop/apps/nodejs/current/bin/"
+      - "C:/Users/User/scoop/apps/nodejs/current/"
+      - "C:/Users/User/scoop/shims/"
+      - "L:/Program Files (x86)/bin/"
+      - "C:/ProgramData/chocolatey/lib/deno/"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
+    searched_directories:
+      - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lld-link.com"
+      - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lld-link.exe"
+      - "L:/Program Files/VisualStudio2022/VC/Tools/MSVC/14.44.34918/bin/Hostx64/x64/lld-link"
+      - "C:/Program Files/PowerShell/7/lld-link.com"
+      - "C:/Program Files/PowerShell/7/lld-link.exe"
+      - "C:/Program Files/PowerShell/7/lld-link"
+      - "C:/Program Files/glzr.io/GlazeWM/cli/lld-link.com"
+      - "C:/Program Files/glzr.io/GlazeWM/cli/lld-link.exe"
+      - "C:/Program Files/glzr.io/GlazeWM/cli/lld-link"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/java8path/lld-link.com"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/java8path/lld-link.exe"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/java8path/lld-link"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/javapath/lld-link.com"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/javapath/lld-link.exe"
+      - "C:/Program Files (x86)/Common Files/Oracle/Java/javapath/lld-link"
+      - "C:/Users/User/AppData/Local/oh-my-posh/lld-link.com"
+      - "C:/Users/User/AppData/Local/oh-my-posh/lld-link.exe"
+      - "C:/Users/User/AppData/Local/oh-my-posh/lld-link"
+      - "C:/Python311/Scripts/lld-link.com"
+      - "C:/Python311/Scripts/lld-link.exe"
+      - "C:/Python311/Scripts/lld-link"
+      - "C:/Python311/lld-link.com"
+      - "C:/Python311/lld-link.exe"
+      - "C:/Python311/lld-link"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link.com"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link.exe"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link"
+      - "C:/ProgramData/Oracle/Java/javapath/lld-link.com"
+      - "C:/ProgramData/Oracle/Java/javapath/lld-link.exe"
+      - "C:/ProgramData/Oracle/Java/javapath/lld-link"
+      - "C:/Windows/System32/lld-link.com"
+      - "C:/Windows/System32/lld-link.exe"
+      - "C:/Windows/System32/lld-link"
+      - "C:/Windows/lld-link.com"
+      - "C:/Windows/lld-link.exe"
+      - "C:/Windows/lld-link"
+      - "C:/Windows/System32/wbem/lld-link.com"
+      - "C:/Windows/System32/wbem/lld-link.exe"
+      - "C:/Windows/System32/wbem/lld-link"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link"
+      - "C:/Windows/System32/OpenSSH/lld-link.com"
+      - "C:/Windows/System32/OpenSSH/lld-link.exe"
+      - "C:/Windows/System32/OpenSSH/lld-link"
+      - "C:/Program Files/dotnet/lld-link.com"
+      - "C:/Program Files/dotnet/lld-link.exe"
+      - "C:/Program Files/dotnet/lld-link"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link"
+      - "L:/Program Files/lld-link.com"
+      - "L:/Program Files/lld-link.exe"
+      - "L:/Program Files/lld-link"
+      - "C:/ProgramData/chocolatey/bin/lld-link.com"
+      - "C:/ProgramData/chocolatey/bin/lld-link.exe"
+      - "C:/ProgramData/chocolatey/bin/lld-link"
+      - "C:/Program Files/Fortect/lld-link.com"
+      - "C:/Program Files/Fortect/lld-link.exe"
+      - "C:/Program Files/Fortect/lld-link"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/Scripts/lld-link.com"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/Scripts/lld-link.exe"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/Scripts/lld-link"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/lld-link.com"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/lld-link.exe"
+      - "C:/Users/User/AppData/Local/Programs/Python/Python310/lld-link"
+      - "C:/Users/User/AppData/Local/Microsoft/WindowsApps/lld-link.com"
+      - "C:/Users/User/AppData/Local/Microsoft/WindowsApps/lld-link.exe"
+      - "C:/Users/User/AppData/Local/Microsoft/WindowsApps/lld-link"
+      - "C:/Users/User/.dotnet/tools/lld-link.com"
+      - "C:/Users/User/.dotnet/tools/lld-link.exe"
+      - "C:/Users/User/.dotnet/tools/lld-link"
+      - "E:/Program Files/Microsoft VS Code/bin/lld-link.com"
+      - "E:/Program Files/Microsoft VS Code/bin/lld-link.exe"
+      - "E:/Program Files/Microsoft VS Code/bin/lld-link"
+      - "E:/Program Files/FreeArc/bin/lld-link.com"
+      - "E:/Program Files/FreeArc/bin/lld-link.exe"
+      - "E:/Program Files/FreeArc/bin/lld-link"
+      - "C:/Users/User/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/User/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/User/AppData/Roaming/npm/lld-link"
+      - "C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/lld-link.com"
+      - "C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/lld-link.exe"
+      - "C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/lld-link"
+      - "C:/tools/neovim/nvim-win64/bin/lld-link.com"
+      - "C:/tools/neovim/nvim-win64/bin/lld-link.exe"
+      - "C:/tools/neovim/nvim-win64/bin/lld-link"
+      - "L:/P/lld-link.com"
+      - "L:/P/lld-link.exe"
+      - "L:/P/lld-link"
+      - "C:/Program Files (x86)/WiX Toolset v3.14/bin/lld-link.com"
+      - "C:/Program Files (x86)/WiX Toolset v3.14/bin/lld-link.exe"
+      - "C:/Program Files (x86)/WiX Toolset v3.14/bin/lld-link"
+      - "C:/Program Files/Git/bin/lld-link.com"
+      - "C:/Program Files/Git/bin/lld-link.exe"
+      - "C:/Program Files/Git/bin/lld-link"
+      - "C:/Program Files/Git/cmd/lld-link.com"
+      - "C:/Program Files/Git/cmd/lld-link.exe"
+      - "C:/Program Files/Git/cmd/lld-link"
+      - "L:/Program Files/Git/cmd/lld-link.com"
+      - "L:/Program Files/Git/cmd/lld-link.exe"
+      - "L:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link"
+      - "L:/Program Files/php/lld-link.com"
+      - "L:/Program Files/php/lld-link.exe"
+      - "L:/Program Files/php/lld-link"
+      - "C:/ProgramData/ComposerSetup/bin/lld-link.com"
+      - "C:/ProgramData/ComposerSetup/bin/lld-link.exe"
+      - "C:/ProgramData/ComposerSetup/bin/lld-link"
+      - "L:/Program Files/bin/lld-link.com"
+      - "L:/Program Files/bin/lld-link.exe"
+      - "L:/Program Files/bin/lld-link"
+      - "C:/Users/User/.cargo/bin/lld-link.com"
+      - "C:/Users/User/.cargo/bin/lld-link.exe"
+      - "C:/Users/User/.cargo/bin/lld-link"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Scripts/lld-link.com"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Scripts/lld-link.exe"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Scripts/lld-link"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Library/bin/lld-link.com"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Library/bin/lld-link.exe"
+      - "C:/Users/User/scoop/apps/miniconda3/current/Library/bin/lld-link"
+      - "C:/Users/User/scoop/apps/nodejs/current/bin/lld-link.com"
+      - "C:/Users/User/scoop/apps/nodejs/current/bin/lld-link.exe"
+      - "C:/Users/User/scoop/apps/nodejs/current/bin/lld-link"
+      - "C:/Users/User/scoop/apps/nodejs/current/lld-link.com"
+      - "C:/Users/User/scoop/apps/nodejs/current/lld-link.exe"
+      - "C:/Users/User/scoop/apps/nodejs/current/lld-link"
+      - "C:/Users/User/scoop/shims/lld-link.com"
+      - "C:/Users/User/scoop/shims/lld-link.exe"
+      - "C:/Users/User/scoop/shims/lld-link"
+      - "L:/Program Files (x86)/bin/lld-link.com"
+      - "L:/Program Files (x86)/bin/lld-link.exe"
+      - "L:/Program Files (x86)/bin/lld-link"
+      - "C:/ProgramData/chocolatey/lib/deno/lld-link.com"
+      - "C:/ProgramData/chocolatey/lib/deno/lld-link.exe"
+      - "C:/ProgramData/chocolatey/lib/deno/lld-link"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/lld-link.com"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/lld-link.exe"
+      - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/lld-link"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/lld-link.com"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/lld-link.exe"
+      - "C:/Users/User/AppData/Local/GitHubDesktop/bin/lld-link"
+      - "L:/Program/LLVM/bin/lld-link.com"
+      - "L:/Program/LLVM/bin/lld-link.exe"
+      - "L:/Program/LLVM/bin/lld-link"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\Program Files\\glzr.io\\GlazeWM\\\\cli"
+        - "C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path"
+        - "C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\User\\AppData\\Local\\oh-my-posh"
+        - "C:\\Python311\\Scripts\\"
+        - "C:\\Python311\\"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\ProgramData\\Oracle\\Java\\javapath"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "L:\\Program Files\\"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\Fortect"
+        - "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
+        - "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python310\\"
+        - "C:\\Users\\User\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\User\\.dotnet\\tools"
+        - "E:\\Program Files\\Microsoft VS Code\\bin"
+        - "E:\\Program Files\\FreeArc\\bin"
+        - "C:\\Users\\User\\AppData\\Roaming\\npm"
+        - "C:\\ProgramData\\chocolatey\\lib\\mingw\\tools\\install\\mingw64\\bin"
+        - "C:\\tools\\neovim\\nvim-win64\\bin"
+        - "L:\\P"
+        - "C:\\Program Files (x86)\\WiX Toolset v3.14\\bin"
+        - "C:\\Program Files\\Git\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "L:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "L:\\Program Files\\php"
+        - "C:\\ProgramData\\ComposerSetup\\bin"
+        - "L:\\Program Files\\bin"
+        - "C:\\Users\\User\\.cargo\\bin"
+        - "C:\\Users\\User\\scoop\\apps\\miniconda3\\current\\scripts"
+        - "C:\\Users\\User\\scoop\\apps\\miniconda3\\current\\Library\\bin"
+        - "C:\\Users\\User\\scoop\\apps\\nodejs\\current\\bin"
+        - "C:\\Users\\User\\scoop\\apps\\nodejs\\current"
+        - "C:\\Users\\User\\scoop\\shims"
+        - "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
+        - "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python310\\"
+        - "C:\\Users\\User\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\User\\.dotnet\\tools"
+        - "E:\\Program Files\\Microsoft VS Code\\bin"
+        - "E:\\Program Files\\FreeArc\\bin"
+        - "C:\\ProgramData\\chocolatey\\lib\\mingw\\tools\\install\\mingw64\\bin"
+        - "C:\\tools\\neovim\\nvim-win64\\bin"
+        - "L:\\Program Files (x86)\\bin"
+        - "L:\\Program Files\\bin"
+        - "C:\\Users\\User\\AppData\\Roaming\\npm"
+        - "C:\\ProgramData\\chocolatey\\lib\\deno"
+        - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
+        - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
   -
     kind: "find-v1"
     backtrace:
@@ -1304,9 +1592,9 @@ events:
       - "C:/Users/User/scoop/shims/"
       - "L:/Program Files (x86)/bin/"
       - "C:/ProgramData/chocolatey/lib/deno/"
-      - "L:/Program Files/LLVM/bin/"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/"
+      - "L:/Program/LLVM/bin/"
       - "C:/Program Files/bin/"
       - "C:/Program Files/sbin/"
       - "C:/Program Files/"
@@ -1455,15 +1743,15 @@ events:
       - "C:/ProgramData/chocolatey/lib/deno/rc.com"
       - "C:/ProgramData/chocolatey/lib/deno/rc.exe"
       - "C:/ProgramData/chocolatey/lib/deno/rc"
-      - "L:/Program Files/LLVM/bin/rc.com"
-      - "L:/Program Files/LLVM/bin/rc.exe"
-      - "L:/Program Files/LLVM/bin/rc"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/rc.com"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/rc.exe"
       - "C:/Users/User/AppData/Roaming/Composer/vendor/bin/rc"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/rc.com"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/rc.exe"
       - "C:/Users/User/AppData/Local/GitHubDesktop/bin/rc"
+      - "L:/Program/LLVM/bin/rc.com"
+      - "L:/Program/LLVM/bin/rc.exe"
+      - "L:/Program/LLVM/bin/rc"
       - "C:/Program Files/bin/rc.com"
       - "C:/Program Files/bin/rc.exe"
       - "C:/Program Files/bin/rc"
@@ -1558,9 +1846,9 @@ events:
         - "L:\\Program Files\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\npm"
         - "C:\\ProgramData\\chocolatey\\lib\\deno"
-        - "L:\\Program Files\\LLVM\\bin"
         - "C:\\Users\\User\\AppData\\Roaming\\Composer\\vendor\\bin"
         - "C:\\Users\\User\\AppData\\Local\\GitHubDesktop\\bin"
+        - "L:\\Program\\LLVM\\bin"
       CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/kek"
       CMAKE_SYSTEM_PREFIX_PATH:
         - "C:/Program Files"
@@ -1576,8 +1864,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5fi6tv"
-      binary: "L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5fi6tv"
+      source: "L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-fii7t9"
+      binary: "L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-fii7t9"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -1586,40 +1874,40 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5fi6tv'
+        Change Dir: 'L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-fii7t9'
         
-        Run Build Command(s): "L:/Program Files/VisualStudio2022/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_bb494.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "L:/Program Files/VisualStudio2022/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_083af.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.14.0-preview-25127-07+c012996cf for .NET Framework
-        Build started 10/16/2025 4:35:20 PM.
+        Build started 11/30/2025 5:44:56 PM.
         
-        Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5fi6tv\\cmTC_bb494.vcxproj" on node 1 (default targets).
+        Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fii7t9\\cmTC_083af.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_bb494.dir\\Debug\\".
+          Creating directory "cmTC_083af.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5fi6tv\\Debug\\".
-          Creating directory "cmTC_bb494.dir\\Debug\\cmTC_bb494.tlog\\".
+          Creating directory "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fii7t9\\Debug\\".
+          Creating directory "cmTC_083af.dir\\Debug\\cmTC_083af.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_bb494.dir\\Debug\\cmTC_bb494.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_bb494.dir\\Debug\\cmTC_bb494.tlog\\unsuccessfulbuild".
+          Creating "cmTC_083af.dir\\Debug\\cmTC_083af.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_083af.dir\\Debug\\cmTC_083af.tlog\\unsuccessfulbuild".
         ClCompile:
-          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_bb494.dir\\Debug\\\\" /Fd"cmTC_bb494.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_083af.dir\\Debug\\\\" /Fd"cmTC_083af.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.44.34918.1 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_bb494.dir\\Debug\\\\" /Fd"cmTC_bb494.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_083af.dir\\Debug\\\\" /Fd"cmTC_083af.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\link.exe /OUT:"L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5fi6tv\\Debug\\cmTC_bb494.exe" /INCREMENTAL /ILK:"cmTC_bb494.dir\\Debug\\cmTC_bb494.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5fi6tv/Debug/cmTC_bb494.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5fi6tv/Debug/cmTC_bb494.lib" /MACHINE:X64  /machine:x64 cmTC_bb494.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_bb494.vcxproj -> L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5fi6tv\\Debug\\cmTC_bb494.exe
+          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\link.exe /OUT:"L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fii7t9\\Debug\\cmTC_083af.exe" /INCREMENTAL /ILK:"cmTC_083af.dir\\Debug\\cmTC_083af.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-fii7t9/Debug/cmTC_083af.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-fii7t9/Debug/cmTC_083af.lib" /MACHINE:X64  /machine:x64 cmTC_083af.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_083af.vcxproj -> L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fii7t9\\Debug\\cmTC_083af.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_bb494.dir\\Debug\\cmTC_bb494.tlog\\unsuccessfulbuild".
-          Touching "cmTC_bb494.dir\\Debug\\cmTC_bb494.tlog\\cmTC_bb494.lastbuildstate".
-        Done Building Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5fi6tv\\cmTC_bb494.vcxproj" (default targets).
+          Deleting file "cmTC_083af.dir\\Debug\\cmTC_083af.tlog\\unsuccessfulbuild".
+          Touching "cmTC_083af.dir\\Debug\\cmTC_083af.tlog\\cmTC_083af.lastbuildstate".
+        Done Building Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fii7t9\\cmTC_083af.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:04.99
+        Time Elapsed 00:00:02.29
         
       exitCode: 0
   -
@@ -1659,8 +1947,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5p3fe0"
-      binary: "L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5p3fe0"
+      source: "L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-ux0ddk"
+      binary: "L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-ux0ddk"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -1670,40 +1958,40 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5p3fe0'
+        Change Dir: 'L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-ux0ddk'
         
-        Run Build Command(s): "L:/Program Files/VisualStudio2022/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_bb604.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "L:/Program Files/VisualStudio2022/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_97a31.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.14.0-preview-25127-07+c012996cf for .NET Framework
-        Build started 10/16/2025 4:35:26 PM.
+        Build started 11/30/2025 5:44:59 PM.
         
-        Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5p3fe0\\cmTC_bb604.vcxproj" on node 1 (default targets).
+        Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ux0ddk\\cmTC_97a31.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_bb604.dir\\Debug\\".
+          Creating directory "cmTC_97a31.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5p3fe0\\Debug\\".
-          Creating directory "cmTC_bb604.dir\\Debug\\cmTC_bb604.tlog\\".
+          Creating directory "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ux0ddk\\Debug\\".
+          Creating directory "cmTC_97a31.dir\\Debug\\cmTC_97a31.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_bb604.dir\\Debug\\cmTC_bb604.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_bb604.dir\\Debug\\cmTC_bb604.tlog\\unsuccessfulbuild".
+          Creating "cmTC_97a31.dir\\Debug\\cmTC_97a31.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_97a31.dir\\Debug\\cmTC_97a31.tlog\\unsuccessfulbuild".
         ClCompile:
-          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_bb604.dir\\Debug\\\\" /Fd"cmTC_bb604.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
+          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_97a31.dir\\Debug\\\\" /Fd"cmTC_97a31.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.44.34918.1 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_bb604.dir\\Debug\\\\" /Fd"cmTC_bb604.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_97a31.dir\\Debug\\\\" /Fd"cmTC_97a31.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "L:\\Program Files\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\link.exe /OUT:"L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5p3fe0\\Debug\\cmTC_bb604.exe" /INCREMENTAL /ILK:"cmTC_bb604.dir\\Debug\\cmTC_bb604.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5p3fe0/Debug/cmTC_bb604.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"L:/SCR/_BFU/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-5p3fe0/Debug/cmTC_bb604.lib" /MACHINE:X64  /machine:x64 cmTC_bb604.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_bb604.vcxproj -> L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5p3fe0\\Debug\\cmTC_bb604.exe
+          L:\\Program Files\\VisualStudio2022\\VC\\Tools\\MSVC\\14.44.34918\\bin\\HostX64\\x64\\link.exe /OUT:"L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ux0ddk\\Debug\\cmTC_97a31.exe" /INCREMENTAL /ILK:"cmTC_97a31.dir\\Debug\\cmTC_97a31.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-ux0ddk/Debug/cmTC_97a31.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"L:/SCR/_BFU_OP/proj_bfu/build/CMakeFiles/CMakeScratch/TryCompile-ux0ddk/Debug/cmTC_97a31.lib" /MACHINE:X64  /machine:x64 cmTC_97a31.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_97a31.vcxproj -> L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ux0ddk\\Debug\\cmTC_97a31.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_bb604.dir\\Debug\\cmTC_bb604.tlog\\unsuccessfulbuild".
-          Touching "cmTC_bb604.dir\\Debug\\cmTC_bb604.tlog\\cmTC_bb604.lastbuildstate".
-        Done Building Project "L:\\SCR\\_BFU\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5p3fe0\\cmTC_bb604.vcxproj" (default targets).
+          Deleting file "cmTC_97a31.dir\\Debug\\cmTC_97a31.tlog\\unsuccessfulbuild".
+          Touching "cmTC_97a31.dir\\Debug\\cmTC_97a31.tlog\\cmTC_97a31.lastbuildstate".
+        Done Building Project "L:\\SCR\\_BFU_OP\\proj_bfu\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ux0ddk\\cmTC_97a31.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:02.40
+        Time Elapsed 00:00:02.35
         
       exitCode: 0
   -

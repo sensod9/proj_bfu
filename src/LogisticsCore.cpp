@@ -6,7 +6,7 @@
 
 namespace LogisticsCore
 {
-	int depositItems(Product* product_ptr, uint32_t increase, Seller& seller, Store& store, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, bool newCreated)
+	int deposit(Product* product_ptr, uint32_t increase, Seller& seller, Store& store, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, bool newCreated)
 	{
 		uint32_t seller_id = product_ptr->seller_id;
 		if (newCreated) {
@@ -33,7 +33,7 @@ namespace LogisticsCore
 		return 0;
 	}
 
-	int takeOutItems(Product* product_ptr, uint32_t decrease, Seller& seller, Store& store, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers)
+	int takeOut(Product* product_ptr, uint32_t decrease, Seller& seller, Store& store, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers)
 	{
 		if (!decrease) return 0;
 		uint32_t seller_id = product_ptr->seller_id;
