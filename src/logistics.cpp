@@ -1,15 +1,14 @@
 #include <iostream>
-#include <functional>
-#include <fstream>
 #include <set>
 
 #include "../include/classLib.hpp"
 #include "../include/utils.hpp"
 #include "../include/login.hpp"
+#include "../include/LogisticsCore.hpp"
 
 using namespace std;
 
-void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) // пересмотреть?
+void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) // rewrite maybe? 
 {
 	for (auto& [id, store] : stores) {
 		cout << endl << " ------------- " << endl;
@@ -28,7 +27,7 @@ void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) //
 	}
 }
 
-void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, uint32_t seller_id)
+void depositItems(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<uint32_t, Product>& products, map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers, uint32_t seller_id)
 { // выбор из имеющихся айтемов его
 	Seller& seller = sellers.at(seller_id);
 	
@@ -52,7 +51,6 @@ void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<u
 	auto& store_pair = *next(stores.begin(), store_index);
 	uint32_t store_id = store_pair.first;
 	Store& store = store_pair.second;
-	vector<Items>& items_in_store = store.sellers_items.at(seller_id);
 	cout << endl << "--- Item selection ---" << endl << "0. Cancel" << endl;
 	
 	i = 1;
@@ -93,45 +91,22 @@ void deposit(map<uint32_t, Store>& stores, map<uint32_t, Seller>& sellers, map<u
 
 			Product product = Product(id, name, size, consist, seller_id, price);
 			products.insert({id, product});
-
-			pair<uint32_t, pair<Items, set<uint32_t>>> new_items_entry{product.id, {Items(&products.at(product.id), increase), {store_id}}};
-			if (seller_items_it != items_by_sellers.end()) {
-				seller_items_it->second.insert(new_items_entry);
-			}
-			else {
-				items_by_sellers.insert({product.seller_id, {new_items_entry}});
-			}
 			newCreated = true;
 		}
-		product_ptr = next(seller_items_ptr->begin(), item_index)->second.first.product;
-		// итератор на продакт в мапе -> пара (items, set) . items . указатель на продакт
-		
-		if (!newCreated) {
+		else {
 			cout << endl << "How much? : ";
 			cin >> increase;
-			seller_items_ptr->at(product_ptr->id).first.quantity += increase;
-			// указатель на айтемы продавца -> пара (items, set) . items . количество
-			bool isThereAny = false;
-			for (auto& item : items_in_store)
-			{
-				if (item.product == product_ptr) {
-					item.quantity += increase;
-					isThereAny = true;
-					break;
-				}
-			}
-			if (!isThereAny) {
-				items_in_store.push_back(Items(product_ptr, increase));
-			}
 		}
-		else {
-			items_in_store.push_back(Items(product_ptr, increase));
-		}
+
+		product_ptr = next(seller_items_ptr->begin(), item_index)->second.first.product;
+		
+		LogisticsCore::depositItems(product_ptr, increase, seller, store, items_by_sellers);
+
 		cout << "Done." << endl;
 	}
 }
 
-void takeOut(
+void takeOutItems(
 	map<uint32_t, Store>& stores,
 	map<uint32_t, Seller>& sellers,
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
@@ -180,44 +155,13 @@ void takeOut(
 
 	// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
 
-	if (!decrease) return;
-	Items& selected_items = items_in_store[item_index];
-	if (decrease < selected_items.quantity)
-	{
-		selected_items.quantity -= decrease;
-		items_by_sellers.at(seller_id).at(selected_items.product->id).first.quantity -= decrease;
-	}
-	else {
-		Product* product_ptr = selected_items.product;
-		items_by_sellers.at(seller_id).at(product_ptr->id).first.quantity -= selected_items.quantity;
-		items_by_sellers.at(seller_id).at(product_ptr->id).second.erase(store_id);
-		if (items_in_store.size() <= 1) {
-			seller.store_items.erase(next(seller.store_items.begin(), store_index));
-			store.sellers_items.erase(seller_id);
-		}
-		else {
-			items_in_store.erase(items_in_store.begin() + item_index);
-		}
-		
-		/* bool isThereMore = false;
-		for (auto& [store_id, store] : stores) {
-			for (auto& [seller_id, seller_items] : store.sellers_items) {
-				for (auto& items : seller_items) {
-					if (product_ptr == items.product) {
-						isThereMore = true;
-						break;
-					}
-				}
-			}
-		}
-		if (!isThereMore) products.erase(product_ptr->id);
-		*/
-	}
+	Product* product_ptr = items_in_store[item_index].product;
+	LogisticsCore::takeOutItems(product_ptr, decrease, seller, store, items_by_sellers);
 	
 	cout << "Done." << endl;
 }
 
-uint32_t enterMenu(uint32_t& seller_id,
+int enterMenu(uint32_t& seller_id,
 	map<uint32_t, Product>& products,
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Store>& stores,
@@ -258,15 +202,17 @@ uint32_t enterMenu(uint32_t& seller_id,
 			case 2:
 				seller_id = 0;
 				break;
-				// депозит через создание айтема (прям конструктором новый айтем) количество далее запихиваем на склад и если там не было айтемов продавца то закидываем указатель на массив к продавцу И В ГЛОБАЛЬНЫЙ ПРОДАКТС ЗАКИДЫВАЕМ АЙТЕМ
+			case 3:
+				//moveItems();
+				break;
 			case 4:
-				deposit(stores, sellers, products, items_by_sellers, seller_id);
+				depositItems(stores, sellers, products, items_by_sellers, seller_id);
 				saveProducts(products);
 				saveStores(stores);
 				saveSellers(sellers);
 				break;
 			case 5:
-				takeOut(stores, sellers, items_by_sellers, seller_id);
+				takeOutItems(stores, sellers, items_by_sellers, seller_id);
 				saveStores(stores);
 				saveSellers(sellers);
 				break;

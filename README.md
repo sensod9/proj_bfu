@@ -1,5 +1,6 @@
 # proj_bfu
-g++ -o logistics.exe src/logistics.cpp src/classLib.cpp src/utils.cpp src/login.cpp -I.
+g++ -o logistics.exe src/logistics.cpp src/classLib.cpp 
+src/utils.cpp src/login.cpp src/StoresAPI.cpp src/LogisticsCore.cpp -I.
 
 
 17979840917474917689 - prik

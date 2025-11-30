@@ -98,7 +98,7 @@ void loadStores(map<uint32_t, Store>& stores, map<uint32_t, Product>& products, 
 		}
 		*/
 		
-		stores.insert({store_id, Store(params[1], Address{address[0], address[1], address[2], stoul(address[3])}, stod(params[3]), sellers_items)});
+		stores.insert({store_id, Store(stoul(params[0]), params[1], Address{address[0], address[1], address[2], stoul(address[3])}, stod(params[3]), sellers_items)});
 			// map<uint32_t, vector<Items>> sellers_items; // id,Items
 	}
 	

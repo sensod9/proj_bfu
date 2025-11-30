@@ -34,7 +34,8 @@ struct Items {
 class Store
 {
 public:
-	Store(string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items);
+	Store(uint32_t id, string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items);
+	uint32_t id;
 	string name;
 	Address address;
 	double capacity;
