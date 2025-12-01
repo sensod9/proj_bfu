@@ -12,9 +12,12 @@ namespace LogisticsCore
 		
 		uint32_t seller_id = product_ptr->seller_id;
 		if (newCreated) {
-			if (!canBeAdded)
+			set<uint32_t> stored_in{store.id};
+			if (!canBeAdded) {
+				stored_in.clear();
 				increase = 0; // добавляем в список продавца, но на склад не отгружаем
-			pair<uint32_t, pair<Items, set<uint32_t>>> new_items_entry{product_ptr->id, {Items(product_ptr, increase), {store.id}}};
+			}
+			pair<uint32_t, pair<Items, set<uint32_t>>> new_items_entry{product_ptr->id, {Items(product_ptr, increase), stored_in}};
 			auto seller_items_it = items_by_sellers.find(seller_id);
 			if (seller_items_it != items_by_sellers.end()) {
 				seller_items_it->second.insert(new_items_entry);

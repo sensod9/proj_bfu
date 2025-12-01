@@ -64,10 +64,7 @@ void depositItems(
 	int store_index = storeSelection(stores, seller, true);
 	if (store_index < 0) return;
 
-	map<uint32_t, pair<Items, set<uint32_t>>>* seller_items_ptr;
-	auto seller_items_it = items_by_sellers.find(seller_id);
-	if (seller_items_it != items_by_sellers.end())
-		seller_items_ptr = &(seller_items_it->second);
+	map<uint32_t, pair<Items, set<uint32_t>>>* seller_items_ptr = &(items_by_sellers.at(seller_id));
 
 	auto& store_pair = *next(stores.begin(), store_index);
 	uint32_t store_id = store_pair.first;
@@ -295,7 +292,7 @@ int enterMenu(uint32_t& seller_id,
 				SyncAPI::saveSellers(sellers);
 				break;
 			case 6:
-				return true;
+				return 1;
 		}
 	}
 	return 0;
@@ -305,7 +302,7 @@ int main()
 {
 	map<uint32_t, Product> products;
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>> items_by_sellers;
-	// (айди продавца - (айди продакта - (указатель на продакт, кол-во), айди складов))
+	// (айди продавца - (айди продакта - айтемс(указатель на продакт, кол-во), айди складов))
 	map<uint32_t, Store> stores;
 	map<uint32_t, Seller> sellers;
 

@@ -1,5 +1,6 @@
 # proj_bfu
 g++ -o logistics.exe src/logistics.cpp src/classLib.cpp src/utils.cpp src/login.cpp src/StoresAPI.cpp src/LogisticsCore.cpp src/SyncAPI.cpp -I.
+g++ -o shop.exe src/shop.cpp src/classLib.cpp src/utils.cpp src/login.cpp src/StoresAPI.cpp src/SyncAPI.cpp -I.
 
 Логины и пароли продавцов:
 seller1 | lol1:kek777
