@@ -4,6 +4,7 @@
 #include "../include/classLib.hpp"
 #include "../include/utils.hpp"
 #include "../include/login.hpp"
+#include "../include/SyncAPI.hpp"
 #include "../include/LogisticsCore.hpp"
 
 using namespace std;
@@ -14,7 +15,7 @@ void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) //
 		cout << endl << " ------------- " << endl;
 		cout << "Name: " << store.name << endl;
 		cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
-		cout << "Capacity: " << store.capacity << endl;
+		cout << "Capacity: " << store.size << '/' << store.capacity << endl;
 		
 		cout << endl << "- Sellers + items -";
 		for (auto& [seller_id, items] : store.sellers_items) {
@@ -27,7 +28,7 @@ void printStores(map<uint32_t, Store>& stores, map<uint32_t, Seller> sellers) //
 	}
 }
 
-uint32_t storeSelection(map<uint32_t, Store>& stores, Seller& seller, bool allStores = true)
+int storeSelection(map<uint32_t, Store>& stores, Seller& seller, bool allStores = true)
 {
 	uint32_t i = 1, store_index;
 	if (allStores) {
@@ -46,7 +47,7 @@ uint32_t storeSelection(map<uint32_t, Store>& stores, Seller& seller, bool allSt
 	cout << " : ";
 
 	cin >> store_index;
-	if (!store_index || store_index >= i) return 0;
+	if (!store_index || store_index >= i) return -1;
 	return store_index - 1;
 }
 
@@ -60,8 +61,8 @@ void depositItems(
 	Seller& seller = sellers.at(seller_id);
 	
 	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
-	uint32_t store_index = storeSelection(stores, seller, true);
-	if (!store_index) return;
+	int store_index = storeSelection(stores, seller, true);
+	if (store_index < 0) return;
 
 	map<uint32_t, pair<Items, set<uint32_t>>>* seller_items_ptr;
 	auto seller_items_it = items_by_sellers.find(seller_id);
@@ -113,17 +114,20 @@ void depositItems(
 			Product product = Product(id, name, size, consist, seller_id, price);
 			products.insert({id, product});
 			newCreated = true;
+			product_ptr = &(products.at(id));
 		}
 		else {
 			cout << endl << "How much? : ";
 			cin >> increase;
+			product_ptr = next(seller_items_ptr->begin(), item_index)->second.first.product;
 		}
 
-		product_ptr = next(seller_items_ptr->begin(), item_index)->second.first.product;
-		
-		LogisticsCore::deposit(product_ptr, increase, seller, store, items_by_sellers);
+		if (LogisticsCore::deposit(product_ptr, increase, seller, store, items_by_sellers, newCreated)) {
+			cout << "There is not enough space. " << store.name << '(' << store.size << '/' << store.capacity << ')' << endl;
+			return;
+		}
 
-		cout << "Done." << endl;
+		cout << endl << "Done. " << store.name << '(' << store.size << '/' << store.capacity << ')' << endl;
 	}
 }
 
@@ -141,8 +145,8 @@ void takeOutItems(
 	}
 
 	cout << endl << "--- Store selection ---" << endl << "0. Cancel" << endl;
-	uint32_t store_index = storeSelection(stores, seller, false);
-	if (!store_index) return;
+	int store_index = storeSelection(stores, seller, false);
+	if (store_index < 0) return;
 
 	uint32_t store_id = next(seller.store_items.begin(), store_index)->first;
 	Store& store = stores.at(store_id);
@@ -171,7 +175,7 @@ void takeOutItems(
 	Product* product_ptr = items_in_store[item_index].product;
 	LogisticsCore::takeOut(product_ptr, decrease, seller, store, items_by_sellers);
 	
-	cout << "Done." << endl;
+	cout << "Done. " << store.name << '(' << store.size << '/' << store.capacity << ')' << endl;
 }
 
 void moveItems(
@@ -188,14 +192,14 @@ void moveItems(
 	}
 
 	cout << endl << "--- Store selection (FROM) ---" << endl << "0. Cancel" << endl;
-	uint32_t store_index_from = storeSelection(stores, seller, false);
-	if (!store_index_from) return;
+	int store_index_from = storeSelection(stores, seller, false);
+	if (store_index_from < 0) return;
 
 	cout << endl << "--- Store selection (TO) ---" << endl << "0. Cancel" << endl;
-	uint32_t store_index_to = storeSelection(stores, seller, true);
-	if (!store_index_to || store_index_from == store_index_to) return;
+	int store_index_to = storeSelection(stores, seller, true);
+	if (store_index_to < 0 || store_index_from == store_index_to) return;
 
-	uint32_t store_from_id = next(seller.store_items.begin(), store_index_from)->first;
+	int32_t store_from_id = next(seller.store_items.begin(), store_index_from)->first;
 	Store& store_from = stores.at(store_from_id);
 	uint32_t store_to_id = next(seller.store_items.begin(), store_index_to)->first;
 	Store& store_to = stores.at(store_to_id);
@@ -222,9 +226,14 @@ void moveItems(
 	// та же i схема + пользуемся вектором [] и у селлера и на складе одни индексы у айтемов => профит даже без мапы, хотя убого, но массив указателей должен быть по тз
 
 	Product* product_ptr = items_in_store[item_index].product;
-	LogisticsCore::takeOut(product_ptr, count, seller, store_from, items_by_sellers);
 	LogisticsCore::deposit(product_ptr, count, seller, store_to, items_by_sellers);
-	
+	if (LogisticsCore::deposit(product_ptr, count, seller, store_to, items_by_sellers)) {
+		cout << "There is not enough space. " << store_to.name << '(' << store_to.size << '/' << store_to.capacity << ')' << endl;
+		return;
+	}
+	LogisticsCore::takeOut(product_ptr, count, seller, store_from, items_by_sellers);
+	// сначала deposit, тк проверяем поместиться ли предмет
+
 	cout << "Done." << endl;
 }
 
@@ -271,19 +280,19 @@ int enterMenu(uint32_t& seller_id,
 				break;
 			case 3:
 				moveItems(stores, sellers, items_by_sellers, seller_id);
-				saveStores(stores);
-				saveSellers(sellers);
+				SyncAPI::saveStores(stores);
+				SyncAPI::saveSellers(sellers);
 				break;
 			case 4:
 				depositItems(stores, sellers, products, items_by_sellers, seller_id);
-				saveProducts(products);
-				saveStores(stores);
-				saveSellers(sellers);
+				SyncAPI::saveProducts(products);
+				SyncAPI::saveStores(stores);
+				SyncAPI::saveSellers(sellers);
 				break;
 			case 5:
 				takeOutItems(stores, sellers, items_by_sellers, seller_id);
-				saveStores(stores);
-				saveSellers(sellers);
+				SyncAPI::saveStores(stores);
+				SyncAPI::saveSellers(sellers);
 				break;
 			case 6:
 				return true;
@@ -299,12 +308,15 @@ int main()
 	// (айди продавца - (айди продакта - (указатель на продакт, кол-во), айди складов))
 	map<uint32_t, Store> stores;
 	map<uint32_t, Seller> sellers;
-	loadProducts(products, items_by_sellers);
-	loadStores(stores, products, items_by_sellers);
-	loadSellers(sellers, stores);
-	saveProducts(products); // удалить потом!!!!!!!!!!!!!!
-	saveStores(stores);
-	saveSellers(sellers);
+
+	SyncAPI::loadProducts(products, items_by_sellers);
+	SyncAPI::loadStores(stores, products, items_by_sellers);
+	SyncAPI::loadSellers(sellers, stores);
+
+	// удалить эту секцию, если не используются файлы для тестов
+	SyncAPI::saveProducts(products);
+	SyncAPI::saveStores(stores);
+	SyncAPI::saveSellers(sellers);
 
 	uint32_t seller_id = 0;
 

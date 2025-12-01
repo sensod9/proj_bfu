@@ -34,11 +34,12 @@ struct Items {
 class Store
 {
 public:
-	Store(uint32_t id, string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items);
+	Store(uint32_t id, string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items, double size = 0);
 	uint32_t id;
 	string name;
 	Address address;
 	double capacity;
+	double size;
 	map<uint32_t, vector<Items>> sellers_items; // id,Items
 };
 

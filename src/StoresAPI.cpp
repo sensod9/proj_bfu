@@ -6,6 +6,9 @@ namespace StoresAPI
 {
 	int add(Store& store, Product* product_ptr, uint32_t increase, bool newCreated)
 	{
+		if (store.capacity - store.size < (product_ptr->size * increase)) return -1;
+		else store.size += (product_ptr->size * increase); 
+
 		uint32_t seller_id = product_ptr->seller_id;
 		auto items_in_store_it = store.sellers_items.find(seller_id);
 		if (items_in_store_it != store.sellers_items.end()) {
@@ -49,6 +52,7 @@ namespace StoresAPI
 		Items& selected_items = items_in_store[item_index];
 		if (decrease < selected_items.quantity) {
 			selected_items.quantity -= decrease;
+			store.size -= (product_ptr->size * decrease); 
 		}
 		else {
 			if (items_in_store.size() <= 1) {
@@ -57,7 +61,9 @@ namespace StoresAPI
 			else {
 				items_in_store.erase(items_in_store.begin() + item_index);
 			}
+			store.size -= (product_ptr->size * selected_items.quantity); 
 		}
+
 		return 0;
 	}
 }

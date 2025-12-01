@@ -4,8 +4,8 @@ Product::Product(uint32_t id, string name, double size, vector<string> consist, 
 	: id(id), name(name), size(size), consist(consist), seller_id(seller_id), price(price)
 {}
 
-Store::Store(uint32_t id, string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items)
-	: id(id), name(name), address(address), capacity(capacity), sellers_items(sellers_items)
+Store::Store(uint32_t id, string name, Address address, double capacity, map<uint32_t, vector<Items>> sellers_items, double size)
+	: id(id), name(name), address(address), capacity(capacity), sellers_items(sellers_items), size(size)
 {}
 
 Seller::Seller(string name, map<uint32_t, vector<Items>*> store_items)

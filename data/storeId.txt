@@ -1,2 +1,2 @@
-1|sklad1|990099,Boston,Chernyahovskogo,9|5000|1,14;2,23;3,20;4,40
-2|sklad2|090909,Kalinigrad,Nevskogo,1|3500|2,4;3,10
+1|sklad1|990099,Boston,Chernyahovskogo,9|50000|1,14;2,23;3,20;4,40
+2|sklad2|090909,Kalinigrad,Nevskogo,1|35000|2,4;3,10
