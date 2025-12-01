@@ -15,4 +15,5 @@ add_executable(main
 	src/utils.cpp
 	src/StoresAPI.cpp
 	src/LogisticsCore.cpp
+	src/SyncAPI.cpp
 )
