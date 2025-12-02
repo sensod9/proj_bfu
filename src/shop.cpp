@@ -6,10 +6,66 @@
 #include "../include/utils.hpp"
 #include "../include/login.hpp"
 #include "../include/SyncAPI.hpp"
+#include "../include/LogisticsCore.hpp"
 
 using namespace std;
 
-void showItems(map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
+void showItemsDetails(
+	pair<Items, set<uint32_t>>* items_pair_ptr,
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
+	map<uint32_t, Seller>& sellers,
+	map<uint32_t, Store>& stores,
+	stack<pair<Items, Store&>>& cart)
+{
+	uint32_t seller_id = items_pair_ptr->first.product->seller_id;
+	Seller& seller = sellers.at(seller_id);
+
+	cout << "----------------";
+	cout << endl << items_pair_ptr->first.product->name << ": " << items_pair_ptr->first.quantity << "pcs" << endl;
+	cout << "Price: " << items_pair_ptr->first.product->price << endl;
+	cout << "Seller: " << seller.name << endl;
+	cout << "Stored in: ";
+	
+	uint32_t i = 1;
+	for (auto& store_id : items_pair_ptr->second) {
+		cout << endl;
+		Store& store = stores.at(store_id);
+		cout << i << ". " << store.name << " (" << store.sellers_items.at(seller_id).at(items_pair_ptr->first.product->id).quantity << ')' << endl;
+		cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
+		++i;
+	}
+	cout << "0. Cancel" << endl;
+	cout << " : ";
+
+	uint32_t store_index;
+	cin >> store_index;
+	if (!store_index || store_index >= i) return;
+	--store_index;
+	
+	uint32_t store_id = next(seller.store_items.begin(), store_index)->first;
+	Store& store = stores.at(store_id);
+
+	uint32_t decrease;
+	cout << endl << "How much? : ";
+	cin >> decrease;
+	if (!decrease) return;
+	
+	if (decrease > store.sellers_items.at(seller_id).at(items_pair_ptr->first.product->id).quantity) {
+		cout << "There is not enough items in this store";
+		return;
+	}
+	
+	cart.push({Items(items_pair_ptr->first.product, decrease), store});
+	
+	// искать в стеке не получится, поэтому отгрузим без сохранения (сохраним при оформлении заказа, при очищении корзины заново депозитнем)
+	Product* product_ptr = items_pair_ptr->first.product;
+	LogisticsCore::takeOut(product_ptr, decrease, seller, store, items_by_sellers);
+	
+	cout << items_pair_ptr->first.product->name << " (" << decrease << ") was added to your cart";
+}
+
+void showItems(
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Store>& stores,
 	uint32_t seller_id)
 {
@@ -30,7 +86,7 @@ void searchItemsByName(
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Seller>& sellers,
 	map<uint32_t, Store>& stores,
-	stack<Items>& cart)
+	stack<pair<Items, Store&>>& cart)
 {
 	vector<pair<Items, set<uint32_t>>*> items_ptrs;
 	for (auto& [seller_id, seller_items] : items_by_sellers) {
@@ -78,7 +134,8 @@ void searchItemsByName(
 	cin >> product_index;
 	if (!product_index || product_index >= i) return;
 	--product_index;
-	// checkProductDetails сюда по next наверн, хотя тут вектор, так что заморочек возникнуть не должно.
+	
+	showItemsDetails(items_ptrs[product_index], items_by_sellers, sellers, stores, cart);
 }
 
 void showAllItems(
@@ -86,7 +143,7 @@ void showAllItems(
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Seller>& sellers,
 	map<uint32_t, Store>& stores,
-	stack<Items>& cart)
+	stack<pair<Items, Store&>>& cart)
 {
 	map<string, pair<vector<Product*>, uint32_t>> items_by_name; // нужно общее кол-во
 	for (auto& [seller_id, seller_items] : items_by_sellers) {
@@ -196,13 +253,58 @@ void changePrice(
 	}
 }
 
+void enterCart(stack<pair<Items, Store&>>& cart,
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
+	map<uint32_t, Seller>& sellers,
+	map<uint32_t, Store>& stores)
+{
+	for (;;) {
+		cout << endl << "--- Cart ---" << endl;
+		stack<pair<Items, Store&>> cart_dump = cart;
+
+		while (!cart.empty()) {
+			pair<Items, Store&> items_pair = cart.top();
+			cout << endl << items_pair.first.product->name << ": " << items_pair.first.quantity << "pcs" << endl;
+			cout << "Price: " << items_pair.first.product->price << endl;
+			cout << "Seller: " << sellers.at(items_pair.first.product->seller_id).name << endl;
+			Store& store = items_pair.second;
+			cout << "Stored in: " << store.name;
+			cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
+			cout << endl;
+			cart.pop();
+		}
+
+		cart = cart_dump;
+		uint32_t flag;
+		pair<Items, Store&> items_pair = cart.top();
+		cout << "0. Cancel" << endl;
+		cout << "1. Remove last items entry" << endl;
+		cout << "2. Purchase" << endl << " : ";
+		cin >> flag;
+		switch (flag) {
+			case 0:
+				return;
+			case 1:
+				LogisticsCore::deposit(items_pair.first.product, items_pair.first.quantity, sellers.at(items_pair.first.product->seller_id), items_pair.second, items_by_sellers, false);
+				cart.pop();
+				break;
+			case 2:
+				SyncAPI::saveStores(stores);
+				SyncAPI::saveSellers(sellers);
+				cart = stack<pair<Items, Store&>>{};
+				cout << "You've successfully purchased the items";
+				return;
+		}
+	}
+}
+
 int enterShop(
 	map<uint32_t, Product>& products,
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Store>& stores,
 	map<uint32_t, Seller>& sellers)
 {
-	stack<Items> cart;
+	stack<pair<Items, Store&>> cart;
 	uint32_t flag;
 	string query;
 	
@@ -227,7 +329,8 @@ int enterShop(
 			// показ товаров продавца то же самое что showItems(sellerId), но учитывать индекс надо
 				break;
 			case 4:
-			// показ, потом: цикл 0 - cancel, 1 - убрать последний товар, 2 - купить -> чек, модифицируем items_by_sellers, store.sellers_items, сохраняем => профит
+				enterCart(cart, items_by_sellers, sellers, stores);
+			// не забудь, что чек = файл со всяким (прям в папку где exe создавай и норм)
 				break;
 			case 5:
 				return 1;

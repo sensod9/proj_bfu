@@ -8,12 +8,21 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(EXECUTABLE_OUTPUT_PATH ".")
 
-add_executable(main
-	src/login.cpp
+add_executable(logistics
 	src/logistics.cpp
+	src/login.cpp
 	src/classLib.cpp
 	src/utils.cpp
 	src/StoresAPI.cpp
 	src/LogisticsCore.cpp
+	src/SyncAPI.cpp
+)
+
+add_executable(shop
+	src/shop.cpp
+	src/login.cpp
+	src/classLib.cpp
+	src/utils.cpp
+	src/StoresAPI.cpp
 	src/SyncAPI.cpp
 )
