@@ -24,5 +24,6 @@ add_executable(shop
 	src/classLib.cpp
 	src/utils.cpp
 	src/StoresAPI.cpp
+	src/LogisticsCore.cpp
 	src/SyncAPI.cpp
 )
