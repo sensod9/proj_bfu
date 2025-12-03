@@ -1,6 +1,10 @@
+#include <iomanip>
 #include <iostream>
 #include <set>
 #include <stack>
+#include <sstream>
+#include <fstream>
+#include <ctime>
 
 #include "../include/classLib.hpp"
 #include "../include/utils.hpp"
@@ -80,8 +84,54 @@ void showItems(
 	}
 }
 
-void searchItemsByName( 
-	string query,
+void searhItemsBySeller( string query,
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
+	map<uint32_t, Seller>& sellers,
+	map<uint32_t, Store>& stores,
+	uint32_t seller_id)
+{
+	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>&> items_by_selected_sellers;
+	for (auto& [seller_id, items_by_seller] : items_by_sellers)
+	{
+		if (sellers.at(seller_id).name.find(query) != string::npos) {
+			items_by_selected_sellers.insert({seller_id, items_by_seller});
+		}
+	}
+	
+	if (items_by_selected_sellers.empty()) {
+		cout << "There is no sellers found, come check later" << endl;
+		return;
+	}
+
+	uint32_t i = 1;
+	for (auto& [seller_id, items_pairs] : items_by_selected_sellers) {
+		cout << i << ". " << sellers.at(seller_id).name << endl;
+	}
+	cout << "0. Cancel" << endl;
+	cout << " : ";
+
+	uint32_t seller_index;
+	cin >> seller_index;
+	if (!seller_index || seller_index >= i) return;
+	--seller_index;
+
+	auto& items = *next(items_by_selected_sellers.begin(), seller_index);
+	// тут я остановился. продолжу вечером
+	// тут я остановился. продолжу вечером
+	// тут я остановился. продолжу вечером
+	// тут я остановился. продолжу вечером
+	for (auto& [product_id, item_pair] : items_by_sellers.at(seller_id)) {
+		cout << endl << item_pair.first.product->name << ": " << item_pair.first.quantity << "pcs" << endl;
+		cout << "Stored in: ";
+		for (auto& store_id : item_pair.second) {
+			cout << stores.at(store_id).name << ' ';
+		}
+		cout << "Price: " << item_pair.first.product->price;
+		cout << endl << endl;
+	}
+}
+
+void searchItemsByName( string query,
 	map<uint32_t, Product>& products,
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Seller>& sellers,
@@ -253,6 +303,49 @@ void changePrice(
 	}
 }
 
+void printCart(stack<pair<Items, Store&>> cart, // cart не по ссылке, ведь просто выводим, не очищаем
+		map<uint32_t, Seller>& sellers, ostream& stream)
+{
+	uint32_t total = 0;
+	while (!cart.empty()) {
+		pair<Items, Store&> items_pair = cart.top();
+		cout << endl << items_pair.first.product->name << ": " << items_pair.first.quantity << "pcs" << endl;
+		cout << "Price: " << items_pair.first.product->price << endl;
+		cout << "Seller: " << sellers.at(items_pair.first.product->seller_id).name << endl;
+		Store& store = items_pair.second;
+		cout << "Stored in: " << store.name;
+		cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
+		cout << endl;
+		total += items_pair.first.product->price * items_pair.first.quantity;
+		cart.pop();
+	}
+	cout << "--------------" << "Total: " << total;
+}
+
+void writeBill(stack<pair<Items, Store&>>& cart,
+		map<uint32_t, Seller> sellers)
+{
+	string datetime;
+	stringstream ss(datetime);
+
+	time_t now = time(nullptr);
+	tm now_local = *localtime(&now);
+
+	// (дд, мм, гггг чч:мм:сс)
+	ss << setw(2) << setfill('0')
+		 << setw(2) << now_local.tm_mday << ", "
+		 << setw(2) << now_local.tm_mon + 1 << ", "
+		 << setw(4) << now_local.tm_year + 1900 << ", "
+		 << setw(2) << now_local.tm_hour << ':'
+		 << setw(2) << now_local.tm_min << ':'
+		 << setw(2) << now_local.tm_sec;
+	
+	ofstream out(datetime);
+	out << "---- BILL ----" << endl << "Date: " << datetime << endl;
+	printCart(cart, sellers, out);
+	out.close();
+}
+
 void enterCart(stack<pair<Items, Store&>>& cart,
 	map<uint32_t, map<uint32_t, pair<Items, set<uint32_t>>>>& items_by_sellers,
 	map<uint32_t, Seller>& sellers,
@@ -260,21 +353,8 @@ void enterCart(stack<pair<Items, Store&>>& cart,
 {
 	for (;;) {
 		cout << endl << "--- Cart ---" << endl;
-		stack<pair<Items, Store&>> cart_dump = cart;
+		printCart(cart, sellers, cout);
 
-		while (!cart.empty()) {
-			pair<Items, Store&> items_pair = cart.top();
-			cout << endl << items_pair.first.product->name << ": " << items_pair.first.quantity << "pcs" << endl;
-			cout << "Price: " << items_pair.first.product->price << endl;
-			cout << "Seller: " << sellers.at(items_pair.first.product->seller_id).name << endl;
-			Store& store = items_pair.second;
-			cout << "Stored in: " << store.name;
-			cout << "Address: " << store.address.index << ", " << store.address.city << ", " << store.address.street << ", " << store.address.house_number << endl;
-			cout << endl;
-			cart.pop();
-		}
-
-		cart = cart_dump;
 		uint32_t flag;
 		pair<Items, Store&> items_pair = cart.top();
 		cout << "0. Cancel" << endl;
@@ -291,6 +371,7 @@ void enterCart(stack<pair<Items, Store&>>& cart,
 			case 2:
 				SyncAPI::saveStores(stores);
 				SyncAPI::saveSellers(sellers);
+				writeBill(cart, sellers);
 				cart = stack<pair<Items, Store&>>{};
 				cout << "You've successfully purchased the items";
 				return;
@@ -330,7 +411,6 @@ int enterShop(
 				break;
 			case 4:
 				enterCart(cart, items_by_sellers, sellers, stores);
-			// не забудь, что чек = файл со всяким (прям в папку где exe создавай и норм)
 				break;
 			case 5:
 				return 1;
