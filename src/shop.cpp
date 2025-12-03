@@ -28,7 +28,9 @@ void showItemsDetails(
 	cout << "----------------";
 	cout << endl << product_ptr->name << ": " << items_pair_ptr->first.quantity << "pcs" << endl;
 	cout << "Price: " << product_ptr->price << endl;
-	cout << "Seller: " << seller.name << endl;
+	cout << "Consists of: ";
+	for (string e : product_ptr->consist) cout << e << ' ';
+	cout << endl << "Seller: " << seller.name << endl;
 	cout << "Stored in: ";
 	
 	uint32_t i = 1;
@@ -136,7 +138,9 @@ void searchItemsBySeller( string query,
 	for (auto& [product_id, items_pair] : items_by_seller.second) {
 		cout << endl << i << ". " << items_pair.first.product->name << ": " << items_pair.first.quantity << "pcs" << endl;
 		cout << "Price: " << items_pair.first.product->price << endl;
-		cout << "Stored in: ";
+		cout << "Consists of: ";
+		for (string e : items_pair.first.product->consist) cout << e << ' ';
+		cout << endl << "Stored in: ";
 		for (auto& store_id : items_pair.second) {
 			cout << stores.at(store_id).name << ' ';
 		}
@@ -191,7 +195,9 @@ void searchItemsByName( string query,
 		cout << endl;
 		cout << i << ". " << items_ptr->first.product->name << endl;
 		cout << "Price: " << items_ptr->first.product->price << "kekov" << endl;
-		cout << "Seller: " << sellers.at(items_ptr->first.product->seller_id).name << endl;
+		cout << "Consists of: ";
+		for (string e : items_ptr->first.product->consist) cout << e << ' ';
+		cout << endl << "Seller: " << sellers.at(items_ptr->first.product->seller_id).name << endl;
 		cout << "Quantity: " << items_ptr->first.quantity << endl;
 		cout << "Stored in: ";
 		for (auto& store_id : items_ptr->second) {

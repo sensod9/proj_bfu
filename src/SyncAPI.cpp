@@ -14,9 +14,9 @@ namespace SyncAPI
 		while (getline(in, line))
 		{
 			if (line.empty()) continue;
-			vector<string> params = splitToVector(line, ';');
+			vector<string> params = splitToVector(line, ',');
 
-			Product product = Product(stoul(params[0]), params[1], stod(params[2]), splitToVector(params[3], ','), stoul(params[4]), stoul(params[5]));
+			Product product = Product(stoul(params[0]), params[1], stod(params[2]), splitToVector(params[3], ';'), stoul(params[4]), stoul(params[5]));
 			products.insert({stoul(params[0]), product});
 
 			auto seller_products_it = items_by_sellers.find(product.seller_id);
@@ -125,11 +125,11 @@ namespace SyncAPI
 		ofstream out(path);
 		out << "Id;Name;Size;Consist;SellerId;Price\n";
 		for (auto& [id, product] : products) {
-			out << id << ';' << product.name << ';' << product.size << ';';
+			out << id << ',' << product.name << ',' << product.size << ',';
 			for (uint32_t i = 0; i < product.consist.size() - 1; ++i) {
-				out << product.consist[i] << ','; 
+				out << product.consist[i] << ';'; 
 			}
-			out << product.consist[product.consist.size() - 1] << ';' << product.seller_id << ';' << product.price << '\n';
+			out << product.consist[product.consist.size() - 1] << ',' << product.seller_id << ',' << product.price << '\n';
 		}
 		out.close();
 	}
